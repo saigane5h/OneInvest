@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OneInvest — Interactive Prototype</title>
+<style>
+  :root {
+    --bg: #070910;
+    --panel: #11141b;
+    --panel-2: #161a23;
+    --panel-3: #1c2230;
+    --ink: #e7ecf3;
+    --ink-dim: #9aa3b2;
+    --ink-mute: #6b7280;
+    --line: #232836;
+    --accent: #4ade80;
+    --accent-2: #60a5fa;
+    --warn: #fbbf24;
+    --bad: #f87171;
+    --good: #34d399;
+    --violet: #a78bfa;
+    --gold: #fcd34d;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--ink); font-family: -apple-system, "Segoe UI", Roboto, system-ui, sans-serif; line-height: 1.45; -webkit-font-smoothing: antialiased; }
+
+  .layout {
+    display: grid; grid-template-columns: 280px 1fr 280px; gap: 24px; max-width: 1240px; margin: 0 auto; padding: 28px 20px;
+  }
+  @media (max-width: 980px) { .layout { grid-template-columns: 1fr; } .side { order: 2; } .stage { order: 1; } }
+
+  /* ---- Side controls ---- */
+  .side { display: flex; flex-direction: column; gap: 14px; }
+  .ctrl { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; }
+  .ctrl h4 { margin: 0 0 10px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.6px; color: var(--ink-mute); }
+  .opt { display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 8px; cursor: pointer; border: 1px solid transparent; font-size: 13px; }
+  .opt:hover { background: var(--panel-2); }
+  .opt.active { background: var(--panel-3); border-color: var(--accent); }
+  .opt .dot { width: 10px; height: 10px; border-radius: 50%; }
+  .d-new { background: var(--accent-2); }
+  .d-mod { background: var(--violet); }
+  .d-adv { background: var(--gold); }
+  .d-ok  { background: var(--good); }
+  .d-warn { background: var(--warn); }
+  .d-bad { background: var(--bad); }
+  .opt small { color: var(--ink-dim); font-size: 11px; margin-left: auto; }
+
+  .branding { display: flex; align-items: center; gap: 10px; padding-bottom: 14px; border-bottom: 1px solid var(--line); margin-bottom: 14px; }
+  .branding .logo { width: 36px; height: 36px; border-radius: 10px; background: linear-gradient(135deg, #4ade80, #60a5fa); display: grid; place-items: center; font-weight: 800; color: #0b0d12; }
+  .branding h2 { margin: 0; font-size: 17px; }
+  .branding .sub { font-size: 11px; color: var(--ink-dim); }
+
+  .key { font-size: 11px; color: var(--ink-dim); line-height: 1.55; }
+  .key b { color: var(--ink); }
+
+  /* ---- Phone frame ---- */
+  .stage { display: flex; justify-content: center; }
+  .phone {
+    width: 380px; max-width: 100%;
+    background: var(--panel); border: 1px solid var(--line); border-radius: 28px;
+    overflow: hidden; box-shadow: 0 30px 80px rgba(0,0,0,0.45);
+    display: flex; flex-direction: column; min-height: 720px;
+  }
+  .status-bar { display: flex; justify-content: space-between; padding: 12px 22px 6px; font-size: 11px; color: var(--ink-dim); }
+  .app-bar { display: flex; align-items: center; padding: 8px 18px 14px; border-bottom: 1px solid var(--line); }
+  .app-bar .back { background: transparent; border: 0; color: var(--accent-2); font-size: 14px; cursor: pointer; padding: 0 8px 0 0; }
+  .app-bar .title { font-weight: 700; font-size: 15px; }
+  .app-bar .right { margin-left: auto; font-size: 11px; color: var(--ink-dim); }
+  .scroll { padding: 16px 18px 20px; flex: 1; overflow-y: auto; }
+
+  /* ---- Cards ---- */
+  .featured { padding: 18px; border-radius: 14px; background: linear-gradient(135deg, rgba(74,222,128,0.14), rgba(96,165,250,0.10)); border: 1px solid rgba(74,222,128,0.35); position: relative; margin-bottom: 16px; }
+  .ribbon { display: inline-block; background: var(--gold); color: #0b0d12; font-size: 9px; font-weight: 800; padding: 4px 8px; border-radius: 4px; letter-spacing: 0.5px; margin-bottom: 8px; }
+  .featured h3 { margin: 0 0 4px; font-size: 16px; }
+  .pill-row { display: flex; gap: 6px; margin: 8px 0 12px; flex-wrap: wrap; }
+  .pill { font-size: 10px; padding: 3px 8px; border-radius: 999px; background: rgba(255,255,255,0.06); color: var(--ink-dim); border: 1px solid var(--line); }
+  .pill.good { color: var(--good); border-color: rgba(52,211,153,0.4); }
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .stats div { background: rgba(0,0,0,0.3); border-radius: 8px; padding: 8px 10px; }
+  .stats span { display: block; font-size: 9px; color: var(--ink-dim); text-transform: uppercase; letter-spacing: 0.5px; }
+  .stats b { font-size: 14px; }
+  .countdown { font-size: 11px; color: var(--warn); margin-top: 10px; display: block; }
+
+  .btn { background: var(--accent); color: #0b0d12; font-weight: 700; padding: 12px 16px; border-radius: 10px; border: 0; font-size: 13px; cursor: pointer; width: 100%; transition: transform 0.05s; }
+  .btn:active { transform: scale(0.98); }
+  .btn.ghost { background: transparent; color: var(--ink); border: 1px solid var(--line); }
+  .btn.warn { background: var(--warn); color: #0b0d12; }
+  .btn.bad { background: var(--bad); color: #0b0d12; }
+  .btn.sm { padding: 8px 12px; font-size: 12px; width: auto; }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .section-head { display: flex; align-items: center; justify-content: space-between; margin: 18px 0 8px; }
+  .section-head h4 { margin: 0; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--ink-mute); }
+  .section-head a { font-size: 11px; color: var(--accent-2); text-decoration: none; }
+
+  .stock { display: grid; grid-template-columns: 32px 1fr auto auto; gap: 10px; align-items: center; padding: 10px 4px; border-bottom: 1px solid var(--line); }
+  .stock:last-child { border-bottom: 0; }
+  .ticker { width: 32px; height: 32px; border-radius: 8px; background: var(--panel-2); display: grid; place-items: center; font-weight: 700; font-size: 11px; }
+  .stk-name { font-size: 13px; }
+  .stk-sub { font-size: 10px; color: var(--ink-dim); }
+  .price { font-size: 13px; font-weight: 600; text-align: right; }
+  .chg { font-size: 11px; text-align: right; width: 56px; }
+  .up { color: var(--good); }
+  .down { color: var(--bad); }
+
+  /* ---- Forms ---- */
+  .field { margin-bottom: 14px; }
+  .field label { font-size: 11px; color: var(--ink-dim); display: block; margin-bottom: 6px; }
+  .field input { width: 100%; background: var(--panel-2); border: 1px solid var(--line); color: var(--ink); padding: 12px 14px; border-radius: 10px; font-size: 16px; font-family: inherit; }
+  .field input:focus { outline: 0; border-color: var(--accent); }
+  .qchips { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
+  .qchip { background: var(--panel-2); border: 1px solid var(--line); padding: 6px 12px; border-radius: 999px; font-size: 11px; cursor: pointer; }
+  .qchip:hover { border-color: var(--accent); }
+
+  .upi-app { display: flex; align-items: center; gap: 12px; padding: 14px; background: var(--panel-2); border-radius: 10px; margin-bottom: 8px; border: 1px solid var(--line); cursor: pointer; }
+  .upi-app:hover { border-color: var(--accent); }
+  .upi-app .ico { width: 36px; height: 36px; border-radius: 8px; display: grid; place-items: center; font-weight: 800; font-size: 14px; color: #0b0d12; }
+  .upi-app .nm { font-weight: 600; font-size: 14px; }
+  .upi-app .sub { font-size: 11px; color: var(--ink-dim); }
+  .upi-app .arrow { margin-left: auto; color: var(--ink-mute); }
+
+  /* ---- Status / progress ---- */
+  .big-status { text-align: center; padding: 30px 10px 20px; }
+  .big-status .ring { width: 96px; height: 96px; margin: 0 auto 18px; border-radius: 50%; border: 4px solid var(--line); border-top-color: var(--warn); animation: spin 1.2s linear infinite; }
+  .big-status.ok .ring { border: 4px solid var(--good); animation: none; position: relative; }
+  .big-status.ok .ring::after { content: "✓"; position: absolute; inset: 0; display: grid; place-items: center; color: var(--good); font-size: 44px; font-weight: 700; }
+  .big-status.bad .ring { border: 4px solid var(--bad); animation: none; position: relative; }
+  .big-status.bad .ring::after { content: "✗"; position: absolute; inset: 0; display: grid; place-items: center; color: var(--bad); font-size: 44px; font-weight: 700; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .big-status h2 { margin: 0 0 6px; font-size: 19px; }
+  .big-status p { margin: 0; color: var(--ink-dim); font-size: 13px; }
+
+  .progress { background: var(--panel-2); border-radius: 10px; padding: 14px; margin: 12px 0; border: 1px solid var(--line); }
+  .progress .row { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 6px; }
+  .progress .bar { height: 6px; background: var(--line); border-radius: 3px; overflow: hidden; }
+  .progress .fill { height: 100%; background: linear-gradient(90deg, var(--warn), var(--accent)); transition: width 0.5s; }
+
+  .note { background: rgba(167,139,250,0.10); border: 1px solid rgba(167,139,250,0.35); border-radius: 10px; padding: 12px; font-size: 12px; margin: 10px 0; }
+  .note.warn { background: rgba(251,191,36,0.10); border-color: rgba(251,191,36,0.35); }
+  .note.good { background: rgba(52,211,153,0.10); border-color: rgba(52,211,153,0.35); }
+  .note.bad  { background: rgba(248,113,113,0.10); border-color: rgba(248,113,113,0.35); }
+  .note b { display: block; margin-bottom: 4px; }
+  .note .ai-tag { display: inline-block; font-size: 9px; font-weight: 800; color: var(--violet); background: rgba(167,139,250,0.20); padding: 2px 6px; border-radius: 4px; margin-right: 6px; letter-spacing: 0.5px; }
+
+  .receipt { background: var(--panel-2); border: 1px solid var(--line); border-radius: 10px; padding: 14px; font-size: 12px; }
+  .receipt .ln { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px dashed var(--line); }
+  .receipt .ln:last-child { border-bottom: 0; }
+  .receipt .ln span { color: var(--ink-dim); }
+  .receipt .ln b { font-weight: 600; }
+
+  .alt-card { background: var(--panel-2); border: 1px solid var(--line); border-radius: 10px; padding: 12px; margin-bottom: 8px; cursor: pointer; }
+  .alt-card:hover { border-color: var(--accent); }
+  .alt-card .top { display: flex; justify-content: space-between; align-items: start; }
+  .alt-card h5 { margin: 0 0 4px; font-size: 13px; }
+  .alt-card .yld { color: var(--good); font-weight: 700; font-size: 14px; }
+  .alt-card .meta { font-size: 11px; color: var(--ink-dim); margin-top: 4px; }
+  .ai-score { display: inline-block; font-size: 9px; font-weight: 800; color: var(--violet); background: rgba(167,139,250,0.15); padding: 2px 6px; border-radius: 4px; margin-left: 6px; }
+
+  .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: var(--panel-3); border: 1px solid var(--line); padding: 12px 18px; border-radius: 10px; font-size: 13px; z-index: 100; opacity: 0; transition: opacity 0.2s; pointer-events: none; }
+  .toast.show { opacity: 1; }
+
+  /* hide tabs */
+  .screen { display: none; }
+  .screen.active { display: block; animation: fadeIn 0.25s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+  /* persona-driven hide/show */
+  body[data-persona="new"] .adv-only,
+  body[data-persona="new"] .mod-only { display: none; }
+  body[data-persona="mod"] .adv-only,
+  body[data-persona="mod"] .new-only { display: none; }
+  body[data-persona="adv"] .new-only,
+  body[data-persona="adv"] .mod-only { display: none; }
+
+  .help { font-size: 11px; color: var(--ink-dim); margin-top: 4px; }
+</style>
+</head>
+<body data-persona="new" data-journey="success">
+
+<div style="max-width:1240px; margin:0 auto; padding:20px 20px 0;">
+  <div style="display:flex; gap:8px; padding:10px 0 14px; border-bottom:1px solid var(--line); flex-wrap:wrap;">
+    <a href="oneinvest.html" style="font-size:12px; color:var(--ink-dim); text-decoration:none; padding:6px 12px; border:1px solid var(--line); border-radius:999px;">📘 Journeys &amp; Workflow</a>
+    <a href="oneinvest-prototype.html" style="font-size:12px; color:var(--ink); text-decoration:none; padding:6px 12px; border:1px solid var(--accent); border-radius:999px; background:var(--panel-2);">📱 Interactive Prototype</a>
+    <a href="oneinvest-prd.html" style="font-size:12px; color:var(--ink-dim); text-decoration:none; padding:6px 12px; border:1px solid var(--line); border-radius:999px;">📄 PRD</a>
+  </div>
+</div>
+
+<div class="layout">
+
+  <!-- LEFT SIDE -->
+  <div class="side">
+    <div class="ctrl">
+      <div class="branding">
+        <div class="logo">OI</div>
+        <div>
+          <h2>OneInvest</h2>
+          <div class="sub">Interactive prototype</div>
+        </div>
+      </div>
+      <div class="key">
+        Pick a <b>persona</b> and a <b>scenario</b>, then tap <b>"Invest in 2 taps"</b> inside the phone to run the journey. The app's copy, density and outcome change based on your choices.
+      </div>
+    </div>
+
+    <div class="ctrl">
+      <h4>Persona</h4>
+      <div class="opt active" data-persona="new"><span class="dot d-new"></span> Aarav <small>New · 24</small></div>
+      <div class="opt" data-persona="mod"><span class="dot d-mod"></span> Priya <small>Moderate · 34</small></div>
+      <div class="opt" data-persona="adv"><span class="dot d-adv"></span> Rohan <small>Advanced · HNI</small></div>
+    </div>
+
+    <div class="ctrl">
+      <h4>Scenario</h4>
+      <div class="opt active" data-journey="success"><span class="dot d-ok"></span> Successful allotment</div>
+      <div class="opt" data-journey="stuck"><span class="dot d-warn"></span> Stuck in UPI · wait</div>
+      <div class="opt" data-journey="fail"><span class="dot d-bad"></span> Allotment failed</div>
+    </div>
+  </div>
+
+  <!-- PHONE -->
+  <div class="stage">
+    <div class="phone">
+      <div class="status-bar">
+        <span>9:41</span>
+        <span>● ● ● ●  5G  82%</span>
+      </div>
+
+      <!-- HOME -->
+      <div class="screen active" id="s-home">
+        <div class="app-bar">
+          <div class="title">OneInvest</div>
+          <div class="right">Bal · ₹2,48,310</div>
+        </div>
+        <div class="scroll">
+          <div class="featured">
+            <div class="ribbon">FEATURED · CLOSING SOON</div>
+            <h3>RBI Floating Rate Bond · 2034</h3>
+            <div class="pill-row">
+              <span class="pill good">Sovereign · AAA</span>
+              <span class="pill">Tax-free</span>
+              <span class="pill">Min ₹1,000</span>
+            </div>
+            <div class="stats">
+              <div><span>Yield</span><b>8.05%</b></div>
+              <div><span>Tenure</span><b>10 yrs</b></div>
+              <div><span>Filled</span><b id="fill-pct">67%</b></div>
+            </div>
+            <div class="countdown">⏱ Closes in 02:14:38</div>
+            <div style="margin-top:12px;"><button class="btn" id="btn-invest">Invest in 2 taps →</button></div>
+          </div>
+
+          <div class="section-head"><h4>Your watchlist</h4><a href="#">See all</a></div>
+          <div class="stock"><div class="ticker">RI</div><div><div class="stk-name">Reliance</div><div class="stk-sub">RELIANCE · NSE</div></div><div class="price">₹2,847.20</div><div class="chg up">+1.24%</div></div>
+          <div class="stock"><div class="ticker">TC</div><div><div class="stk-name">TCS</div><div class="stk-sub">TCS · NSE</div></div><div class="price">₹4,122.55</div><div class="chg down">−0.38%</div></div>
+          <div class="stock"><div class="ticker">HD</div><div><div class="stk-name">HDFC Bank</div><div class="stk-sub">HDFCBANK · NSE</div></div><div class="price">₹1,684.10</div><div class="chg up">+0.72%</div></div>
+          <div class="stock"><div class="ticker">IN</div><div><div class="stk-name">Infosys</div><div class="stk-sub">INFY · NSE</div></div><div class="price">₹1,920.40</div><div class="chg up">+2.10%</div></div>
+          <div class="stock"><div class="ticker">ZO</div><div><div class="stk-name">Zomato</div><div class="stk-sub">ZOMATO · NSE</div></div><div class="price">₹268.85</div><div class="chg down">−1.05%</div></div>
+
+          <div class="section-head"><h4>Open IPOs</h4><a href="#">View all</a></div>
+          <div class="stock"><div class="ticker" style="background:rgba(252,211,77,0.18);color:var(--gold);">SW</div><div><div class="stk-name">Swiggy IPO</div><div class="stk-sub">Closes 21 Jun · QIB 4.2x</div></div><div class="price">₹371–390</div><div class="chg" style="color:var(--gold);">Apply</div></div>
+          <div class="stock"><div class="ticker" style="background:rgba(252,211,77,0.18);color:var(--gold);">NS</div><div><div class="stk-name">NSDL IPO</div><div class="stk-sub">Closes 24 Jun · QIB 1.1x</div></div><div class="price">₹760–800</div><div class="chg" style="color:var(--gold);">Apply</div></div>
+        </div>
+      </div>
+
+      <!-- AMOUNT -->
+      <div class="screen" id="s-amount">
+        <div class="app-bar">
+          <button class="back" data-goto="s-home">←</button>
+          <div class="title">RBI Floating Rate Bond</div>
+        </div>
+        <div class="scroll">
+          <div class="new-only">
+            <div class="note">
+              <b>This is a government bond</b>
+              The Reserve Bank of India pays you 8.05% interest. Safer than equity. Your money is locked for the term — you can sell after listing.
+            </div>
+          </div>
+          <div class="mod-only">
+            <div class="note good">
+              <span class="ai-tag">AI</span><b>Post-tax yield: 7.21% (32% bracket)</b>
+              vs your last FD at 6.4% post-tax. AI suggests this fits your "tax-efficient fixed income" goal.
+            </div>
+          </div>
+          <div class="adv-only">
+            <div class="receipt" style="margin-bottom:12px;">
+              <div class="ln"><span>ISIN</span><b>IN0020230069</b></div>
+              <div class="ln"><span>RTA</span><b>KFin Technologies</b></div>
+              <div class="ln"><span>Coupon (semi-annual)</span><b>8.05% floating</b></div>
+              <div class="ln"><span>Modified duration</span><b>6.84</b></div>
+              <div class="ln"><span>YTM at issue price</span><b>8.05%</b></div>
+              <div class="ln"><span>Tranche size</span><b>₹500 Cr</b></div>
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Investment amount</label>
+            <input type="text" id="amt" value="10000" inputmode="numeric">
+            <div class="qchips">
+              <span class="qchip" data-amt="5000">₹5,000</span>
+              <span class="qchip" data-amt="10000">₹10,000</span>
+              <span class="qchip" data-amt="50000">₹50,000</span>
+              <span class="qchip adv-only" data-amt="2500000">₹25 Lakh</span>
+            </div>
+            <div class="help new-only">Minimum ₹1,000. Maximum ₹2 Lakh in retail tranche.</div>
+            <div class="help adv-only">HNI tranche: ₹2L–₹2 Cr. Your category is auto-detected from PAN.</div>
+          </div>
+
+          <button class="btn" data-goto="s-upi">Pay with UPI →</button>
+        </div>
+      </div>
+
+      <!-- UPI -->
+      <div class="screen" id="s-upi">
+        <div class="app-bar">
+          <button class="back" data-goto="s-amount">←</button>
+          <div class="title">Choose UPI app</div>
+          <div class="right">ASBA · safe</div>
+        </div>
+        <div class="scroll">
+          <div class="new-only">
+            <div class="note">
+              <b>Your money stays in your account.</b>
+              UPI will "block" the amount — only debited if you get the bond. Otherwise released within 2 hours.
+            </div>
+          </div>
+          <div class="adv-only">
+            <div class="note">
+              <span class="ai-tag">AI</span><b>Bank health · live</b>
+              HDFC UPI median today: 38s. SBI UPI: 71s (slower than usual). Pick HDFC if you have a choice.
+            </div>
+          </div>
+
+          <div class="upi-app" data-bank="hdfc"><div class="ico" style="background:#ff5722;">G</div><div><div class="nm">GPay · HDFC ****4521</div><div class="sub">Recommended · 38s median</div></div><div class="arrow">→</div></div>
+          <div class="upi-app" data-bank="phonepe"><div class="ico" style="background:#5f259f; color:#fff;">P</div><div><div class="nm">PhonePe · ICICI ****8810</div><div class="sub">42s median</div></div><div class="arrow">→</div></div>
+          <div class="upi-app" data-bank="paytm"><div class="ico" style="background:#00baf2;">P</div><div><div class="nm">Paytm · SBI ****3392</div><div class="sub">71s median · slower today</div></div><div class="arrow">→</div></div>
+        </div>
+      </div>
+
+      <!-- WAITING -->
+      <div class="screen" id="s-wait">
+        <div class="app-bar">
+          <div class="title">Processing</div>
+          <div class="right" id="wait-clock">00:00</div>
+        </div>
+        <div class="scroll">
+          <div class="big-status" id="status-block">
+            <div class="ring"></div>
+            <h2 id="wait-title">Waiting for your bank</h2>
+            <p id="wait-sub">Your money has not been debited yet.</p>
+          </div>
+
+          <div class="progress">
+            <div class="row"><span>Tranche filled</span><span id="tranche-pct">67%</span></div>
+            <div class="bar"><div class="fill" id="tranche-fill" style="width:67%"></div></div>
+          </div>
+
+          <div id="wait-note"></div>
+
+          <div id="planb-block" style="display:none;">
+            <h4 style="font-size:12px; text-transform:uppercase; letter-spacing:0.5px; color:var(--ink-mute); margin: 16px 0 8px;">If this doesn't go through</h4>
+            <div class="alt-card">
+              <div class="top"><h5>SDL Maharashtra 2032 <span class="ai-score">95% match</span></h5><div class="yld">7.92%</div></div>
+              <div class="meta">Sovereign · 8 yrs · open till 26 Jun</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SUCCESS / PORTFOLIO -->
+      <div class="screen" id="s-success">
+        <div class="app-bar">
+          <div class="title">Subscription confirmed</div>
+        </div>
+        <div class="scroll">
+          <div class="big-status ok">
+            <div class="ring"></div>
+            <h2 id="ok-title">You got the bond 🎉</h2>
+            <p id="ok-sub">10 units of RBI Floating Rate Bond allotted.</p>
+          </div>
+
+          <div class="new-only">
+            <div class="note good">
+              <b>What happens next?</b>
+              Your first interest of <b>₹201</b> arrives on <b>19 Dec 2026</b>. The bond will show in "Fixed income" inside your portfolio.
+            </div>
+          </div>
+
+          <div class="mod-only">
+            <div class="receipt">
+              <div class="ln"><span>Allotted units</span><b>10</b></div>
+              <div class="ln"><span>Investment</span><b>₹10,000</b></div>
+              <div class="ln"><span>Post-tax yield</span><b>7.21%</b></div>
+              <div class="ln"><span>Next coupon</span><b>19 Dec 2026 · ₹201</b></div>
+              <div class="ln"><span>Sell window opens</span><b>24 Jun 2026</b></div>
+            </div>
+            <div class="note" style="margin-top:12px;">
+              <span class="ai-tag">AI</span><b>Set up coupon auto-reinvest?</b>
+              You can route the ₹201 every 6 months into the next similar issuance automatically.
+            </div>
+          </div>
+
+          <div class="adv-only">
+            <div class="receipt">
+              <div class="ln"><span>ISIN</span><b>IN0020230069</b></div>
+              <div class="ln"><span>Allotted units</span><b>2,500</b></div>
+              <div class="ln"><span>Investment</span><b>₹25,00,000</b></div>
+              <div class="ln"><span>Allotment timestamp</span><b>10:00:47.213</b></div>
+              <div class="ln"><span>Category</span><b>HNI</b></div>
+              <div class="ln"><span>YTM at allotment</span><b>8.05%</b></div>
+              <div class="ln"><span>Modified duration</span><b>6.84</b></div>
+              <div class="ln"><span>BSE contract note</span><b style="color:var(--accent-2);">Download PDF →</b></div>
+            </div>
+          </div>
+
+          <div style="display:flex; gap:8px; margin-top:16px;">
+            <button class="btn ghost" data-goto="s-home">← Home</button>
+            <button class="btn">View portfolio</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- FAIL -->
+      <div class="screen" id="s-fail">
+        <div class="app-bar">
+          <div class="title">Not allotted</div>
+        </div>
+        <div class="scroll">
+          <div class="big-status bad">
+            <div class="ring"></div>
+            <h2>Tranche closed before your turn</h2>
+            <p id="fail-sub">Subscription was 100% filled at 10:01:23 AM.</p>
+          </div>
+
+          <div class="note bad">
+            <b>Your ₹10,000 is on its way back</b>
+            UPI block released at 10:01:41. Money returns to your account within 2 hours <span class="adv-only">(NPCI SLA, UTR <b>UPI/426193</b>)</span>.
+          </div>
+
+          <div class="new-only">
+            <div class="note">
+              <b>Why didn't I get it?</b>
+              Too many people applied at the same time. Your bank confirmed 18 seconds after the bond ran out. Nothing you did wrong.
+            </div>
+          </div>
+
+          <div class="adv-only">
+            <div class="receipt" style="margin-top:10px;">
+              <div class="ln"><span>Your confirm time</span><b>10:01:41</b></div>
+              <div class="ln"><span>Tranche close time</span><b>10:01:23</b></div>
+              <div class="ln"><span>Gap</span><b style="color:var(--bad);">+18s late</b></div>
+              <div class="ln"><span>Bank median today</span><b>71s (SBI)</b></div>
+              <div class="ln"><span>Priority next time</span><b style="color:var(--good);">Enabled ✓</b></div>
+            </div>
+          </div>
+
+          <h4 style="font-size:12px; text-transform:uppercase; letter-spacing:0.5px; color:var(--ink-mute); margin: 16px 0 8px;"><span class="ai-tag">AI</span> Open now · similar to what you wanted</h4>
+
+          <div class="alt-card">
+            <div class="top"><h5>SDL Maharashtra 2032 <span class="ai-score">95% match</span></h5><div class="yld">7.92%</div></div>
+            <div class="meta">Sovereign · 8 yrs · ₹1,000 min · closes 26 Jun</div>
+          </div>
+          <div class="alt-card">
+            <div class="top"><h5>NHAI InvIT Bond 2033 <span class="ai-score">88% match</span></h5><div class="yld">8.15%</div></div>
+            <div class="meta">AAA · 9 yrs · ₹10,000 min · closes 23 Jun</div>
+          </div>
+          <div class="alt-card mod-only adv-only">
+            <div class="top"><h5>Tata Capital NCD 2031 <span class="ai-score">81% match</span></h5><div class="yld">8.65%</div></div>
+            <div class="meta">AA+ · 7 yrs · ₹10,000 min · closes 28 Jun</div>
+          </div>
+
+          <div class="note" style="margin-top:14px;">
+            <b>Next RBI Floating Rate auction: 15 Jul 2026, 10 AM</b>
+            <button class="btn sm" style="margin-top:8px;">🔔 Notify me 30 min early</button>
+          </div>
+
+          <button class="btn ghost" style="margin-top:14px;" data-goto="s-home">← Back to home</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- RIGHT SIDE -->
+  <div class="side">
+    <div class="ctrl">
+      <h4>Persona diff · this screen</h4>
+      <div class="key" id="diff-panel" style="font-size:12px; line-height:1.55;">Open a screen to see how it changes per persona.</div>
+    </div>
+
+    <div class="ctrl">
+      <h4>How to use this</h4>
+      <div class="key">
+        Pick a persona &amp; scenario, tap <b>Invest in 2 taps</b>, choose UPI, watch the journey. The panel above shows what each persona sees on the screen you're currently viewing — so you don't need to re-run the journey to compare.
+      </div>
+    </div>
+
+    <div class="ctrl">
+      <h4>AI moments (purple tag)</h4>
+      <div class="key">
+        AI appears for: bank-health warnings, alternative ranking, persona-aware copy, post-tax yield framing. <br><br>
+        AI <b>never</b> decides: allotment, eligibility, refund timing, suitability gating.
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  const body = document.body;
+  const screens = document.querySelectorAll('.screen');
+
+  const diffs = {
+    's-home': {
+      title: 'Homepage',
+      rows: [
+        ['Aarav (New)', 'Sees featured bond + watchlist with prices in plain rupees. No jargon.'],
+        ['Priya (Moderate)', 'Same layout. AI nudges open IPOs that fit her risk profile higher in the list.'],
+        ['Rohan (Advanced)', 'Compact mode toggle (settings). HNI tranches surface as a separate card. Live tranche %.'],
+      ],
+    },
+    's-amount': {
+      title: 'Amount & details',
+      rows: [
+        ['Aarav (New)', 'Plain-English note: "This is a government bond, RBI pays 8.05%". ₹5K / ₹10K / ₹50K chips.'],
+        ['Priya (Moderate)', 'AI card: "Post-tax yield 7.21% vs your last FD at 6.4%". Default amount ₹1L.'],
+        ['Rohan (Advanced)', 'Full receipt: ISIN, RTA, modified duration 6.84, YTM, tranche size. Default ₹25L (HNI). No hand-holding.'],
+      ],
+    },
+    's-upi': {
+      title: 'UPI app picker',
+      rows: [
+        ['Aarav (New)', 'Calming note: "Your money stays in your account — UPI blocks, doesn\'t debit." Reduces panic.'],
+        ['Priya (Moderate)', 'No banner. Sees bank list. Recommended bank pre-sorted.'],
+        ['Rohan (Advanced)', 'AI bank-health card: "HDFC UPI 38s median today, SBI 71s — pick HDFC." Latency-aware.'],
+      ],
+    },
+    's-wait': {
+      title: 'Processing / wait',
+      rows: [
+        ['Aarav (New)', '"Almost there. We\'ll buzz you when done." Soft tone, no metrics. Push-friendly so user can close app.'],
+        ['Priya (Moderate)', 'Live tranche fill %. Plan B card surfaces at 80% with similar bond — she can pre-queue.'],
+        ['Rohan (Advanced)', 'Raw latency: "HDFC median 38s. Yours 71s." Plan B filtered to HNI-eligible bonds only.'],
+      ],
+    },
+    's-success': {
+      title: 'Success / allotment',
+      rows: [
+        ['Aarav (New)', 'Confetti + plain text: "Your first ₹201 interest arrives 19 Dec." Hides ISIN, jargon explained inline.'],
+        ['Priya (Moderate)', 'Receipt: units, post-tax yield, next coupon, sell window. AI prompt: enable coupon auto-reinvest?'],
+        ['Rohan (Advanced)', 'Full dense receipt: ISIN, allotment timestamp, category (HNI), YTM, duration, BSE contract note PDF download.'],
+      ],
+    },
+    's-fail': {
+      title: 'Allotment failed',
+      rows: [
+        ['Aarav (New)', 'Soft message: "Too many people applied. Nothing you did wrong." 2 simpler alternatives. Refund ETA.'],
+        ['Priya (Moderate)', '3 AI-ranked alternatives (sovereign + AAA + NCD). "Notify 30 min early" for next auction.'],
+        ['Rohan (Advanced)', 'Timing-gap receipt: confirm time vs tranche close. UTR number. Priority-queue flag. HNI-only alternatives.'],
+      ],
+    },
+  };
+
+  function updateDiff(id) {
+    const d = diffs[id];
+    const el = document.getElementById('diff-panel');
+    if (!d || !el) return;
+    const persona = body.dataset.persona;
+    const label = { new: 'Aarav', mod: 'Priya', adv: 'Rohan' }[persona];
+    el.innerHTML =
+      '<div style="font-size:11px; color:var(--ink-mute); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:8px;">Now showing · ' + d.title + '</div>' +
+      d.rows.map(r => {
+        const cur = r[0].startsWith(label);
+        return '<div style="padding:8px 10px; border-radius:8px; margin-bottom:6px; background:' + (cur ? 'var(--panel-3)' : 'transparent') + '; border:1px solid ' + (cur ? 'var(--accent)' : 'var(--line)') + ';">' +
+          '<div style="font-weight:600; font-size:11px; color:' + (cur ? 'var(--accent)' : 'var(--ink-dim)') + '; margin-bottom:2px;">' + r[0] + (cur ? ' · current' : '') + '</div>' +
+          '<div style="font-size:12px; color:var(--ink);">' + r[1] + '</div></div>';
+      }).join('');
+  }
+
+  function go(id) {
+    screens.forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    updateDiff(id);
+  }
+  function toast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(t._h);
+    t._h = setTimeout(() => t.classList.remove('show'), 1800);
+  }
+
+  // Persona switcher
+  document.querySelectorAll('.opt[data-persona]').forEach(el => {
+    el.addEventListener('click', () => {
+      document.querySelectorAll('.opt[data-persona]').forEach(o => o.classList.remove('active'));
+      el.classList.add('active');
+      body.dataset.persona = el.dataset.persona;
+      const names = { new: 'Aarav (new)', mod: 'Priya (moderate)', adv: 'Rohan (advanced)' };
+      toast('Persona: ' + names[el.dataset.persona]);
+      const cur = document.querySelector('.screen.active');
+      if (cur) updateDiff(cur.id);
+    });
+  });
+
+  updateDiff('s-home');
+
+  // Journey switcher
+  document.querySelectorAll('.opt[data-journey]').forEach(el => {
+    el.addEventListener('click', () => {
+      document.querySelectorAll('.opt[data-journey]').forEach(o => o.classList.remove('active'));
+      el.classList.add('active');
+      body.dataset.journey = el.dataset.journey;
+      const names = { success: 'Success path', stuck: 'Stuck in UPI', fail: 'Allotment failed' };
+      toast('Scenario: ' + names[el.dataset.journey]);
+    });
+  });
+
+  // Back & generic goto
+  document.querySelectorAll('[data-goto]').forEach(el => {
+    el.addEventListener('click', () => go(el.dataset.goto));
+  });
+
+  // Quick amount chips
+  document.querySelectorAll('.qchip').forEach(c => {
+    c.addEventListener('click', () => {
+      document.getElementById('amt').value = c.dataset.amt;
+    });
+  });
+
+  // Invest button → amount
+  document.getElementById('btn-invest').addEventListener('click', () => {
+    const persona = body.dataset.persona;
+    if (persona === 'adv') document.getElementById('amt').value = '2500000';
+    else if (persona === 'mod') document.getElementById('amt').value = '100000';
+    else document.getElementById('amt').value = '10000';
+    go('s-amount');
+  });
+
+  // UPI app → start journey simulation
+  document.querySelectorAll('.upi-app').forEach(u => {
+    u.addEventListener('click', () => runJourney(u.dataset.bank));
+  });
+
+  // ===== Journey runner =====
+  let trancheTimer, clockTimer;
+  function runJourney(bank) {
+    go('s-wait');
+    const journey = body.dataset.journey;
+    const persona = body.dataset.persona;
+
+    // reset
+    const ring = document.querySelector('#status-block .ring');
+    document.getElementById('status-block').className = 'big-status';
+    document.getElementById('wait-title').textContent = 'Waiting for your bank';
+    document.getElementById('wait-sub').textContent = 'Your money has not been debited yet.';
+    document.getElementById('planb-block').style.display = 'none';
+    document.getElementById('wait-note').innerHTML = '';
+
+    let pct = 67;
+    let t = 0;
+    document.getElementById('tranche-pct').textContent = pct + '%';
+    document.getElementById('tranche-fill').style.width = pct + '%';
+    document.getElementById('wait-clock').textContent = '00:00';
+
+    // bank-health note (advanced + paytm/SBI)
+    if (persona !== 'new' && bank === 'paytm') {
+      document.getElementById('wait-note').innerHTML =
+        '<div class="note warn"><span class="ai-tag">AI</span><b>SBI UPI slower than usual</b>Median 71s today vs 38s for HDFC. Hang on — your money is safe.</div>';
+    } else if (persona === 'new') {
+      document.getElementById('wait-note').innerHTML =
+        '<div class="note"><b>Almost there.</b>Banks take about a minute to confirm. We\'ll buzz you when it\'s done — you can close the app.</div>';
+    }
+
+    clearInterval(trancheTimer); clearInterval(clockTimer);
+
+    clockTimer = setInterval(() => {
+      t++;
+      const m = String(Math.floor(t / 60)).padStart(2, '0');
+      const s = String(t % 60).padStart(2, '0');
+      document.getElementById('wait-clock').textContent = m + ':' + s;
+    }, 1000);
+
+    trancheTimer = setInterval(() => {
+      pct = Math.min(100, pct + (journey === 'fail' ? 4 : 2));
+      document.getElementById('tranche-pct').textContent = pct + '%';
+      document.getElementById('tranche-fill').style.width = pct + '%';
+      document.getElementById('fill-pct').textContent = pct + '%';
+
+      // Plan B surfaces when fill rate looks risky (moderate / advanced)
+      if (pct >= 80 && persona !== 'new' && journey !== 'success') {
+        document.getElementById('planb-block').style.display = 'block';
+      }
+
+      if (pct >= 100 && journey === 'fail') {
+        clearInterval(trancheTimer); clearInterval(clockTimer);
+        setTimeout(() => go('s-fail'), 600);
+      }
+    }, 700);
+
+    // outcomes
+    if (journey === 'success') {
+      setTimeout(() => {
+        clearInterval(trancheTimer); clearInterval(clockTimer);
+        go('s-success');
+      }, 3200);
+    } else if (journey === 'stuck') {
+      // long wait, then eventual success
+      setTimeout(() => {
+        document.getElementById('wait-title').textContent = 'Bank is taking longer than usual';
+        document.getElementById('wait-sub').textContent = 'Still safe. Money has not been debited.';
+      }, 4000);
+      setTimeout(() => {
+        document.getElementById('planb-block').style.display = 'block';
+      }, 6000);
+      setTimeout(() => {
+        clearInterval(trancheTimer); clearInterval(clockTimer);
+        go('s-success');
+      }, 9000);
+    } else if (journey === 'fail') {
+      // tranche timer drives the failure
+      setTimeout(() => {
+        document.getElementById('wait-title').textContent = 'Tranche filling fast';
+        document.getElementById('wait-sub').textContent = 'Subscription nearing 100%.';
+      }, 2500);
+    }
+  }
+</script>
+</body>
+</html>

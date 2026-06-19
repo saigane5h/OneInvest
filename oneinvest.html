@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OneInvest — Bond + IPO Subscription Workflow & PRD</title>
+<style>
+  :root {
+    --bg: #0b0d12;
+    --panel: #11141b;
+    --panel-2: #161a23;
+    --ink: #e7ecf3;
+    --ink-dim: #9aa3b2;
+    --ink-mute: #6b7280;
+    --line: #232836;
+    --accent: #4ade80;
+    --accent-2: #60a5fa;
+    --warn: #fbbf24;
+    --bad: #f87171;
+    --good: #34d399;
+    --violet: #a78bfa;
+    --gold: #fcd34d;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--ink); font-family: -apple-system, "Segoe UI", Roboto, system-ui, sans-serif; line-height: 1.5; }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 32px 20px 80px; }
+
+  /* Brand */
+  .brand {
+    display: flex; align-items: center; gap: 14px; margin-bottom: 4px;
+  }
+  .logo {
+    width: 44px; height: 44px; border-radius: 12px;
+    background: linear-gradient(135deg, #4ade80 0%, #60a5fa 100%);
+    display: grid; place-items: center; font-weight: 800; color: #0b0d12; font-size: 20px;
+  }
+  h1 { font-size: 30px; margin: 0; letter-spacing: -0.5px; }
+  .tagline { color: var(--ink-dim); font-size: 14px; margin: 4px 0 28px 58px; }
+
+  /* Nav strip */
+  .nav { display: flex; gap: 8px; flex-wrap: wrap; padding: 10px 0 24px; border-bottom: 1px solid var(--line); margin-bottom: 28px; }
+  .nav a { font-size: 12px; color: var(--ink-dim); text-decoration: none; padding: 6px 12px; border: 1px solid var(--line); border-radius: 999px; }
+  .nav a:hover { color: var(--ink); border-color: var(--accent); }
+
+  /* Section */
+  h2 { font-size: 22px; margin: 48px 0 6px; letter-spacing: -0.3px; }
+  h2 .num { color: var(--ink-mute); font-weight: 500; margin-right: 10px; }
+  .sub { color: var(--ink-dim); font-size: 14px; margin: 0 0 20px; max-width: 780px; }
+
+  /* Cards / panels */
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 20px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 880px) { .grid-3, .grid-2 { grid-template-columns: 1fr; } }
+
+  /* ===== Homepage mockup ===== */
+  .phone {
+    background: var(--panel); border: 1px solid var(--line); border-radius: 22px; padding: 0; overflow: hidden;
+  }
+  .phone-top {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 18px; border-bottom: 1px solid var(--line); background: var(--panel-2);
+  }
+  .phone-top .left { display: flex; align-items: center; gap: 10px; font-weight: 600; }
+  .phone-top .dot { width: 28px; height: 28px; border-radius: 8px; background: linear-gradient(135deg, #4ade80, #60a5fa); display: grid; place-items: center; color: #0b0d12; font-weight: 800; font-size: 13px; }
+  .balance { font-size: 12px; color: var(--ink-dim); }
+  .balance b { color: var(--ink); font-size: 14px; }
+
+  .featured {
+    margin: 16px; padding: 18px; border-radius: 14px;
+    background: linear-gradient(135deg, rgba(74,222,128,0.12), rgba(96,165,250,0.10));
+    border: 1px solid rgba(74,222,128,0.35);
+    position: relative;
+  }
+  .ribbon { display: inline-block; background: var(--gold); color: #0b0d12; font-size: 10px; font-weight: 800; padding: 4px 8px; border-radius: 4px; letter-spacing: 0.5px; margin-bottom: 10px; }
+  .featured h3 { margin: 0 0 4px; font-size: 17px; }
+  .featured .pill-row { display: flex; gap: 6px; margin: 8px 0 12px; flex-wrap: wrap; }
+  .pill { font-size: 10px; padding: 3px 8px; border-radius: 999px; background: rgba(255,255,255,0.06); color: var(--ink-dim); border: 1px solid var(--line); }
+  .pill.good { color: var(--good); border-color: rgba(52,211,153,0.4); }
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 10px; }
+  .stats div { background: rgba(0,0,0,0.25); border-radius: 8px; padding: 8px 10px; }
+  .stats span { display: block; font-size: 10px; color: var(--ink-dim); text-transform: uppercase; letter-spacing: 0.5px; }
+  .stats b { font-size: 15px; }
+  .cta {
+    margin-top: 12px; display: flex; gap: 8px; align-items: center;
+  }
+  .btn {
+    background: var(--accent); color: #0b0d12; font-weight: 700; padding: 10px 16px; border-radius: 10px; border: 0; font-size: 13px; cursor: pointer;
+  }
+  .btn.ghost { background: transparent; color: var(--ink); border: 1px solid var(--line); }
+  .countdown { font-size: 11px; color: var(--warn); margin-left: auto; }
+
+  .section-head { display: flex; align-items: center; justify-content: space-between; padding: 0 18px; margin-top: 8px; }
+  .section-head h4 { margin: 0; font-size: 13px; }
+  .section-head a { font-size: 11px; color: var(--accent-2); text-decoration: none; }
+
+  .stock-list { padding: 8px 12px 18px; }
+  .stock {
+    display: grid; grid-template-columns: 36px 1fr auto auto; gap: 12px; align-items: center;
+    padding: 10px 6px; border-bottom: 1px solid var(--line);
+  }
+  .stock:last-child { border-bottom: 0; }
+  .ticker { width: 36px; height: 36px; border-radius: 8px; background: var(--panel-2); display: grid; place-items: center; font-weight: 700; font-size: 12px; }
+  .stk-name { font-size: 13px; }
+  .stk-sub { font-size: 10px; color: var(--ink-dim); }
+  .price { font-size: 13px; font-weight: 600; text-align: right; }
+  .chg { font-size: 11px; text-align: right; }
+  .up { color: var(--good); }
+  .down { color: var(--bad); }
+  .spark { width: 60px; height: 22px; }
+
+  /* ===== Personas ===== */
+  .persona {
+    padding: 18px; border-radius: 14px; border: 1px solid var(--line); background: var(--panel);
+  }
+  .persona .avatar { width: 48px; height: 48px; border-radius: 50%; display: grid; place-items: center; font-weight: 700; font-size: 18px; }
+  .persona .head { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+  .persona h4 { margin: 0; font-size: 15px; }
+  .persona .role { font-size: 11px; color: var(--ink-dim); }
+  .persona .tag { font-size: 10px; padding: 3px 8px; border-radius: 6px; display: inline-block; margin-top: 6px; font-weight: 600; }
+  .lvl-new .avatar { background: rgba(96,165,250,0.18); color: var(--accent-2); }
+  .lvl-new .tag { background: rgba(96,165,250,0.18); color: var(--accent-2); }
+  .lvl-mod .avatar { background: rgba(167,139,250,0.18); color: var(--violet); }
+  .lvl-mod .tag { background: rgba(167,139,250,0.18); color: var(--violet); }
+  .lvl-adv .avatar { background: rgba(252,211,77,0.18); color: var(--gold); }
+  .lvl-adv .tag { background: rgba(252,211,77,0.18); color: var(--gold); }
+  .persona dl { margin: 12px 0 0; font-size: 12px; }
+  .persona dt { color: var(--ink-mute); margin-top: 8px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .persona dd { margin: 2px 0 0; color: var(--ink); }
+
+  /* ===== Journeys ===== */
+  .journey { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 22px; margin-bottom: 18px; }
+  .j-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+  .j-head h3 { margin: 0; font-size: 17px; display: flex; align-items: center; gap: 10px; }
+  .j-badge { font-size: 10px; padding: 4px 10px; border-radius: 999px; font-weight: 700; letter-spacing: 0.5px; }
+  .b-ok { background: rgba(52,211,153,0.15); color: var(--good); border: 1px solid rgba(52,211,153,0.4); }
+  .b-wait { background: rgba(251,191,36,0.15); color: var(--warn); border: 1px solid rgba(251,191,36,0.4); }
+  .b-fail { background: rgba(248,113,113,0.15); color: var(--bad); border: 1px solid rgba(248,113,113,0.4); }
+
+  .steps { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; margin-bottom: 14px; }
+  @media (max-width: 880px) { .steps { grid-template-columns: repeat(2, 1fr); } }
+  .step { background: var(--panel-2); border: 1px solid var(--line); border-radius: 10px; padding: 12px; position: relative; }
+  .step .n { position: absolute; top: -10px; left: 12px; width: 22px; height: 22px; border-radius: 50%; background: var(--bg); border: 1px solid var(--line); display: grid; place-items: center; font-size: 11px; font-weight: 700; color: var(--ink-dim); }
+  .step .t { font-size: 11px; color: var(--ink-mute); margin: 8px 0 2px; }
+  .step .h { font-size: 12px; font-weight: 600; margin-bottom: 4px; }
+  .step .d { font-size: 11px; color: var(--ink-dim); }
+  .step.ok { border-color: rgba(52,211,153,0.4); }
+  .step.warn { border-color: rgba(251,191,36,0.4); }
+  .step.bad { border-color: rgba(248,113,113,0.4); }
+  .step.ai { border-color: rgba(167,139,250,0.4); }
+  .step.ai::before { content: "AI"; position: absolute; top: 8px; right: 8px; font-size: 9px; font-weight: 800; color: var(--violet); background: rgba(167,139,250,0.15); padding: 2px 6px; border-radius: 4px; }
+
+  .persona-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; border-top: 1px solid var(--line); padding-top: 14px; margin-top: 8px; }
+  @media (max-width: 880px) { .persona-row { grid-template-columns: 1fr; } }
+  .pcol { font-size: 12px; }
+  .pcol .lab { font-size: 10px; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 4px; color: var(--ink-mute); display: flex; align-items: center; gap: 6px; }
+  .dotcol { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+  .dot-new { background: var(--accent-2); }
+  .dot-mod { background: var(--violet); }
+  .dot-adv { background: var(--gold); }
+  .pcol p { margin: 0; color: var(--ink); }
+
+  /* ===== PRD ===== */
+  .prd { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 26px; }
+  .prd h3 { margin: 24px 0 6px; font-size: 16px; }
+  .prd h3:first-child { margin-top: 0; }
+  .prd p, .prd li { font-size: 13px; color: var(--ink); }
+  .prd .meta { display: flex; gap: 16px; flex-wrap: wrap; font-size: 11px; color: var(--ink-dim); padding: 12px 14px; background: var(--panel-2); border-radius: 10px; margin-bottom: 18px; }
+  .prd .meta b { color: var(--ink); }
+  .prd ul { padding-left: 18px; margin: 6px 0; }
+  .prd table { width: 100%; border-collapse: collapse; font-size: 12px; margin: 8px 0; }
+  .prd th, .prd td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); }
+  .prd th { color: var(--ink-mute); font-weight: 500; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+  .kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 10px 0 18px; }
+  @media (max-width: 880px) { .kpi-row { grid-template-columns: repeat(2, 1fr); } }
+  .kpi { background: var(--panel-2); border: 1px solid var(--line); border-radius: 10px; padding: 12px; }
+  .kpi .v { font-size: 18px; font-weight: 700; color: var(--accent); }
+  .kpi .l { font-size: 11px; color: var(--ink-dim); margin-top: 2px; }
+
+  .quote { border-left: 3px solid var(--accent); padding: 6px 14px; color: var(--ink-dim); font-size: 13px; font-style: italic; margin: 12px 0; }
+
+  footer { margin-top: 56px; padding-top: 24px; border-top: 1px solid var(--line); font-size: 11px; color: var(--ink-mute); text-align: center; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="brand">
+    <div class="logo">OI</div>
+    <div>
+      <h1>OneInvest</h1>
+    </div>
+  </div>
+  <div class="tagline">One app for stocks, IPOs and bonds — designed for the 60-second UPI window.</div>
+
+  <div class="nav" style="display:flex; gap:8px; padding:10px 0 14px; border-bottom:1px solid var(--line); margin-bottom:12px;">
+    <a href="oneinvest.html" style="background:var(--panel-2); color:var(--ink); border-color:var(--accent);">📘 Journeys &amp; Workflow</a>
+    <a href="oneinvest-prototype.html">📱 Interactive Prototype</a>
+    <a href="oneinvest-prd.html">📄 PRD</a>
+  </div>
+
+  <div class="nav">
+    <a href="#home">Homepage</a>
+    <a href="#personas">Personas</a>
+    <a href="#j1">Journey 1 · Success</a>
+    <a href="#j2">Journey 2 · Stuck</a>
+    <a href="#j3">Journey 3 · Allotment Failed</a>
+  </div>
+
+  <!-- ================= HOMEPAGE ================= -->
+  <h2 id="home"><span class="num">01</span>Homepage — bond highlighted, stocks visible</h2>
+  <p class="sub">The featured tranche is hero-treated with a closing countdown. Equities, mutual funds, and watchlist sit below so the user sees their full portfolio context, not a single forced upsell.</p>
+
+  <div class="grid-2">
+    <div class="phone">
+      <div class="phone-top">
+        <div class="left"><div class="dot">OI</div> OneInvest</div>
+        <div class="balance">Balance · <b>₹2,48,310</b></div>
+      </div>
+
+      <div class="featured">
+        <div class="ribbon">FEATURED · CLOSING SOON</div>
+        <h3>RBI Floating Rate Bond · 2034</h3>
+        <div class="pill-row">
+          <span class="pill good">Sovereign · AAA</span>
+          <span class="pill">Tax-free interest</span>
+          <span class="pill">Min ₹1,000</span>
+        </div>
+        <div class="stats">
+          <div><span>Yield</span><b>8.05%</b></div>
+          <div><span>Tenure</span><b>10 yrs</b></div>
+          <div><span>Subscribed</span><b>67%</b></div>
+        </div>
+        <div class="cta">
+          <button class="btn">Invest in 2 taps</button>
+          <button class="btn ghost">Details</button>
+          <div class="countdown">⏱ Closes in 02:14:38</div>
+        </div>
+      </div>
+
+      <div class="section-head">
+        <h4>Your watchlist</h4>
+        <a href="#">See all</a>
+      </div>
+      <div class="stock-list">
+        <div class="stock">
+          <div class="ticker">RI</div>
+          <div><div class="stk-name">Reliance Industries</div><div class="stk-sub">RELIANCE · NSE</div></div>
+          <div class="price">₹2,847.20</div>
+          <div class="chg up">+1.24%</div>
+        </div>
+        <div class="stock">
+          <div class="ticker">TC</div>
+          <div><div class="stk-name">Tata Consultancy</div><div class="stk-sub">TCS · NSE</div></div>
+          <div class="price">₹4,122.55</div>
+          <div class="chg down">−0.38%</div>
+        </div>
+        <div class="stock">
+          <div class="ticker">HD</div>
+          <div><div class="stk-name">HDFC Bank</div><div class="stk-sub">HDFCBANK · NSE</div></div>
+          <div class="price">₹1,684.10</div>
+          <div class="chg up">+0.72%</div>
+        </div>
+        <div class="stock">
+          <div class="ticker">IN</div>
+          <div><div class="stk-name">Infosys</div><div class="stk-sub">INFY · NSE</div></div>
+          <div class="price">₹1,920.40</div>
+          <div class="chg up">+2.10%</div>
+        </div>
+        <div class="stock">
+          <div class="ticker">ZO</div>
+          <div><div class="stk-name">Zomato</div><div class="stk-sub">ZOMATO · NSE</div></div>
+          <div class="price">₹268.85</div>
+          <div class="chg down">−1.05%</div>
+        </div>
+      </div>
+
+      <div class="section-head">
+        <h4>Open IPOs</h4>
+        <a href="#">View all 4</a>
+      </div>
+      <div class="stock-list">
+        <div class="stock">
+          <div class="ticker" style="background:rgba(252,211,77,0.18); color:var(--gold);">SW</div>
+          <div><div class="stk-name">Swiggy IPO</div><div class="stk-sub">Closes 21 Jun · QIB 4.2x</div></div>
+          <div class="price">₹371–390</div>
+          <div class="chg" style="color:var(--gold);">Apply</div>
+        </div>
+        <div class="stock">
+          <div class="ticker" style="background:rgba(252,211,77,0.18); color:var(--gold);">NS</div>
+          <div><div class="stk-name">NSDL IPO</div><div class="stk-sub">Closes 24 Jun · QIB 1.1x</div></div>
+          <div class="price">₹760–800</div>
+          <div class="chg" style="color:var(--gold);">Apply</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 style="margin-top:0;font-size:15px;">Why this layout</h3>
+      <p style="font-size:13px;color:var(--ink-dim);margin:0 0 14px;">Drawn from Groww (clean cards, "subscribed %" front and centre) and Zerodha Kite (information density, real prices). What we changed:</p>
+      <ul style="font-size:12.5px; color:var(--ink); padding-left:18px;">
+        <li><b>Countdown not just date</b> — surfaces urgency the moment the user opens the app.</li>
+        <li><b>"Subscribed 67%"</b> — sets the right expectation; if it's already 95%, the user shouldn't expect to win.</li>
+        <li><b>Yield + min ticket + rating</b> visible in 3 chips — the three questions every retail investor actually asks.</li>
+        <li><b>Stocks below, not hidden</b> — a bond banner that buries the user's portfolio feels like a billboard, not a brokerage.</li>
+        <li><b>IPOs share the same card grammar</b> — one mental model for all primary-market issuances.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ================= PERSONAS ================= -->
+  <h2 id="personas"><span class="num">02</span>Personas — three levels of confidence and capital</h2>
+  <p class="sub">Every journey below has a coloured marker for how each persona experiences the same step differently. The product doesn't change — the language, defaults and follow-ups do.</p>
+
+  <div class="grid-3">
+    <div class="persona lvl-new">
+      <div class="head">
+        <div class="avatar">A</div>
+        <div>
+          <h4>Aarav · 24</h4>
+          <div class="role">Junior backend engineer, Bengaluru</div>
+          <span class="tag">NEW INVESTOR</span>
+        </div>
+      </div>
+      <dl>
+        <dt>Portfolio</dt><dd>₹40,000 across 3 mutual funds. First bond purchase ever.</dd>
+        <dt>Goal</dt><dd>Park ₹10,000 in something "safer than equity, better than FD".</dd>
+        <dt>Fear</dt><dd>Losing money to a scam. Doesn't know what "tranche" or "allotment" means.</dd>
+        <dt>Behaviour</dt><dd>Reads every word. Pauses at jargon. Will close the app if confused.</dd>
+      </dl>
+    </div>
+
+    <div class="persona lvl-mod">
+      <div class="head">
+        <div class="avatar">P</div>
+        <div>
+          <h4>Priya · 34</h4>
+          <div class="role">Product manager, Hyderabad</div>
+          <span class="tag">MODERATE</span>
+        </div>
+      </div>
+      <dl>
+        <dt>Portfolio</dt><dd>₹8L across equity, ELSS, two corporate bonds. Knows the basics.</dd>
+        <dt>Goal</dt><dd>Allocate ₹1L to a sovereign bond for tax-efficient fixed income.</dd>
+        <dt>Fear</dt><dd>Locking capital and missing a better issuance two weeks later.</dd>
+        <dt>Behaviour</dt><dd>Compares yield vs FD vs G-sec. Trusts the platform but verifies once.</dd>
+      </dl>
+    </div>
+
+    <div class="persona lvl-adv">
+      <div class="head">
+        <div class="avatar">R</div>
+        <div>
+          <h4>Rohan · 47</h4>
+          <div class="role">CA + HNI investor, Mumbai</div>
+          <span class="tag">ADVANCED</span>
+        </div>
+      </div>
+      <dl>
+        <dt>Portfolio</dt><dd>₹4.2 Cr across equity, AIF, direct bonds, REITs. 12-yr investor.</dd>
+        <dt>Goal</dt><dd>Place ₹25L in the HNI tranche, reinvest coupons through laddering.</dd>
+        <dt>Fear</dt><dd>Allotment cuts because of category mis-segmentation. Hates retail-tier UX.</dd>
+        <dt>Behaviour</dt><dd>Wants ISIN, RTA, duration, YTM, modified duration. Skips all hand-holding.</dd>
+      </dl>
+    </div>
+  </div>
+
+  <!-- ================= JOURNEY 1 ================= -->
+  <h2 id="j1"><span class="num">03</span>Journey 1 — Successful subscription, bond in portfolio</h2>
+  <p class="sub">The golden path. Used by ~60% of investors when demand is healthy but not extreme.</p>
+
+  <div class="journey">
+    <div class="j-head">
+      <h3>✓ Apply → UPI mandate → Bank confirms → Allotted → Portfolio updated</h3>
+      <span class="j-badge b-ok">SUCCESS</span>
+    </div>
+
+    <div class="steps">
+      <div class="step ok"><div class="n">1</div><div class="t">Homepage</div><div class="h">Tap "Invest in 2 taps"</div><div class="d">Featured RBI bond card. Countdown visible.</div></div>
+      <div class="step ai"><div class="n">2</div><div class="t">Suitability check</div><div class="h">Risk + horizon match</div><div class="d">AI gates against profile; deterministic if mismatch.</div></div>
+      <div class="step ok"><div class="n">3</div><div class="t">Amount + UPI</div><div class="h">Enter ₹10,000, pick UPI app</div><div class="d">Pre-validated against daily UPI limit.</div></div>
+      <div class="step ok"><div class="n">4</div><div class="t">Mandate sent</div><div class="h">UPI block created</div><div class="d">Money blocked, not debited. ASBA-style.</div></div>
+      <div class="step ok"><div class="n">5</div><div class="t">Bank confirms</div><div class="h">Slot locked at 10:00:47</div><div class="d">FCFS at confirmation. Allotment guaranteed.</div></div>
+      <div class="step ok"><div class="n">6</div><div class="t">Portfolio</div><div class="h">Bond appears in "Fixed income"</div><div class="d">ISIN, units, next coupon date, sell window.</div></div>
+    </div>
+
+    <div class="persona-row">
+      <div class="pcol">
+        <div class="lab"><span class="dotcol dot-new"></span>Aarav · New</div>
+        <p>Sees a confetti animation + a plain-English line: <i>"You've bought 10 units of an RBI bond. Your first interest of ₹201 arrives 19 Dec."</i> The portfolio screen explains "what is a coupon" inline on first view.</p>
+      </div>
+      <div class="pcol">
+        <div class="lab"><span class="dotcol dot-mod"></span>Priya · Moderate</div>
+        <p>Confirmation screen surfaces post-tax yield comparison vs her last FD. One tap to set a reminder for the next RBI auction. Coupon auto-reinvest toggle defaulted off but visible.</p>
+      </div>
+      <div class="pcol">
+        <div class="lab"><span class="dotcol dot-adv"></span>Rohan · Advanced</div>
+        <p>Skips animations. Goes straight to a dense receipt: ISIN, RTA, settlement date, modified duration, YTM at allotment price, BSE contract note PDF. One-click export to his portfolio tracker.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= JOURNEY 2 ================= -->
+  <h2 id="j2"><span class="num">04</span>Journey 2 — Stuck under payment, status + alternatives</h2>
+  <p class="sub">The 60–120 second UPI gap. The user has clicked, money is blocked, but the bank hasn't confirmed. Most apps go silent here. OneInvest narrates the wait.</p>
+
+  <div class="journey">
+    <div class="j-head">
+      <h3>⏳ Apply → UPI mandate sent → Bank slow → Tranche filling → Live status + Plan B surfaced</h3>
+      <span class="j-badge b-wait">IN PROGRESS</span>
+    </div>
+
+    <div class="steps">
+      <div class="step ok"><div class="n">1</div><div class="t">Apply</div><div class="h">UPI mandate sent</div><div class="d">10:00:03 — money blocked at user's bank.</div></div>
+      <div class="step ai"><div class="n">2</div><div class="t">Bank health</div><div class="h">SBI running 40s slow today</div><div class="d">AI surfaces: "Your bank is slower than usual."</div></div>
+      <div class="step warn"><div class="n">3</div><div class="t">Live status</div><div class="h">"Waiting for bank · 00:47"</div><div class="d">Tranche fill % updates every 2s. No spinner.</div></div>
+      <div class="step ai"><div class="n">4</div><div class="t">Plan B</div><div class="h">Similar bonds shown</div><div class="d">Eligibility-gated, then AI-ranked by yield similarity.</div></div>
+      <div class="step ok"><div class="n">5</div><div class="t">Confirmed</div><div class="h">Slot allotted at 10:01:12</div><div class="d">Or, if not — auto-refund within 2 hours.</div></div>
+      <div class="step ok"><div class="n">6</div><div class="t">Outcome</div><div class="h">Portfolio updated</div><div class="d">If failed → refund tracker + Plan B card.</div></div>
+    </div>
+
+    <div class="persona-row">
+      <div class="pcol">
+        <div class="lab"><span class="dotcol dot-new"></span>Aarav · New</div>
+        <p>Sees a calm progress bar with one honest sentence: <i>"Your bank takes about a minute to confirm. Your money is safe — it has not been debited yet."</i> No "Try Again" button to mash. Push notification on confirmation so he can close the app.</p>
+      </div>
+      <div class="pcol">
+        <div class="lab"><span class="dotcol dot-mod"></span>Priya · Moderate</div>
+        <p>Sees live tranche fill (62% → 71% → 78%). If fill rate looks likely to close her out, AI surfaces 2 similar sovereign bonds with comparable yield. She can "queue" Plan B — auto-apply if Plan A fails.</p>
+      </div>
+      <div class="pcol">
+        <div class="lab"><span class="dotcol dot-adv"></span>Rohan · Advanced</div>
+        <p>Sees raw latency: <i>"HDFC UPI median today: 38s. Yours: 71s."</i> Plan B is filtered by HNI tranche eligibility only. Refund SLA shown numerically: <i>"If unallotted, refund initiated within 2 hrs per NPCI."</i></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= JOURNEY 3 ================= -->
+  <h2 id="j3"><span class="num">05</span>Journey 3 — Allotment failed, alternatives & refund</h2>
+  <p class="sub">The tranche closed before the bank confirmed. Money will be refunded. The product's job is to make the loss feel handled, not abandoned.</p>
+
+  <div class="journey">
+    <div class="j-head">
+      <h3>✗ Tranche closed → Refund initiated → AI suggests alternatives → User re-engages</h3>
+      <span class="j-badge b-fail">UNALLOTTED</span>
+    </div>
+
+    <div class="steps">
+      <div class="step bad"><div class="n">1</div><div class="t">Outcome</div><div class="h">Tranche subscribed 100%</div><div class="d">Closed at 10:01:23. Your bank confirmed at 10:01:41.</div></div>
+      <div class="step ok"><div class="n">2</div><div class="t">Refund</div><div class="h">UPI block released</div><div class="d">"Money returns to your account in under 2 hours."</div></div>
+      <div class="step ai"><div class="n">3</div><div class="t">Why</div><div class="h">Honest explanation</div><div class="d">"Your bank confirmed 18s after tranche closed."</div></div>
+      <div class="step ai"><div class="n">4</div><div class="t">Alternatives</div><div class="h">3 similar bonds + 1 IPO</div><div class="d">Filtered by rules, ranked by AI on yield + tenure.</div></div>
+      <div class="step ok"><div class="n">5</div><div class="t">Re-engage</div><div class="h">"Notify me 30 min early"</div><div class="d">Next RBI auction date pre-filled.</div></div>
+      <div class="step ok"><div class="n">6</div><div class="t">Goodwill</div><div class="h">Priority queue next time</div><div class="d">Auto-applied; no opt-in needed.</div></div>
+    </div>
+
+    <div class="persona-row">
+      <div class="pcol">
+        <div class="lab"><span class="dotcol dot-new"></span>Aarav · New</div>
+        <p>Gets the message in plain English first, jargon second. <i>"You didn't get a unit this time — too many people applied. Your ₹10,000 is on its way back. Here are 3 safer options open today."</i> No blame, no panic.</p>
+      </div>
+      <div class="pcol">
+        <div class="lab"><span class="dotcol dot-mod"></span>Priya · Moderate</div>
+        <p>Sees refund tracker (UTR, expected credit time), a yield-comparison card across 3 alternatives, and a "lock-in to next issuance" toggle that pre-applies her at T-30s when the next RBI tranche opens.</p>
+      </div>
+      <div class="pcol">
+        <div class="lab"><span class="dotcol dot-adv"></span>Rohan · Advanced</div>
+        <p>Gets a tranche-fill timeline graph, his confirmation timestamp marked on it, and an HNI-only alternatives table with ISIN, YTM, modified duration. Option to escalate to a relationship manager for the next private placement.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= PRD link card ================= -->
+  <h2 id="prd"><span class="num">06</span>PRD &amp; AI Product Brief</h2>
+  <p class="sub">The product requirements doc — problem, market gap, AI thesis, KPIs, risks — lives on its own page so it can be shared standalone with stakeholders.</p>
+  <a href="oneinvest-prd.html" style="display:block; padding:20px 24px; background:var(--panel); border:1px solid var(--line); border-radius:14px; text-decoration:none; color:var(--ink);">
+    <div style="font-size:16px; font-weight:700; margin-bottom:4px;">📄 Open the OneInvest PRD →</div>
+    <div style="color:var(--ink-dim); font-size:13px;">Problem statement · Competitive matrix · AI thesis · 8 KPIs · Risks · Open questions</div>
+  </a>
+
+  <div class="prd" style="display:none;">
+    <div class="meta">
+      <div><b>Author:</b> Sai Ganesh Motamarri · AI Product Manager</div>
+      <div><b>Date:</b> 19 Jun 2026</div>
+      <div><b>Status:</b> v1 · For review</div>
+      <div><b>Codename:</b> OneInvest</div>
+    </div>
+
+    <h3>1. Problem Statement</h3>
+    <p>India is in the middle of a fixed-income retail boom — RBI Retail Direct crossed 1.6M accounts and corporate-bond platforms (GoldenPi, Wint, Bondbazaar) are scaling fast. But the subscription experience is broken at the seams:</p>
+    <ul>
+      <li><b>The 60–120 second UPI gap</b> — between mandate and bank confirmation — is unmanaged. Users either refresh frantically or watch a silent spinner.</li>
+      <li><b>"Application could not be processed"</b> is the universal failure message — no explanation, no recovery path, no next issuance date.</li>
+      <li><b>Refunds for unallotted applications take 3–7 days</b> on most platforms, despite NPCI mandating 2 hours. Trust quietly erodes.</li>
+      <li><b>Allotment fairness is opaque</b> — investors don't know if FCFS, lottery, or pro-rata applied. Suspicion fills the vacuum.</li>
+      <li><b>No platform binds equities + IPOs + bonds + suitability + AI into one mental model.</b> Zerodha is deep in equity, Groww is broad but shallow, GoldenPi is bond-only.</li>
+    </ul>
+
+    <h3>2. Why OneInvest Wins</h3>
+    <table>
+      <thead><tr><th>Capability</th><th>Zerodha</th><th>Groww</th><th>GoldenPi</th><th>OneInvest</th></tr></thead>
+      <tbody>
+        <tr><td>Bond + Equity + IPO in one app</td><td>Partial</td><td>Yes</td><td>Bonds only</td><td><b>Yes, unified mental model</b></td></tr>
+        <tr><td>Live tranche fill % during UPI wait</td><td>No</td><td>No</td><td>No</td><td><b>Yes</b></td></tr>
+        <tr><td>AI bank-health latency warning</td><td>No</td><td>No</td><td>No</td><td><b>Yes</b></td></tr>
+        <tr><td>2-hour refund SLA visible in-app</td><td>No</td><td>No</td><td>No</td><td><b>Yes (NPCI-tracked)</b></td></tr>
+        <tr><td>Rule-gated AI alternatives on failure</td><td>No</td><td>Generic</td><td>No</td><td><b>Yes (suitability-filtered)</b></td></tr>
+        <tr><td>Persona-aware copy (new / mod / adv)</td><td>No</td><td>No</td><td>No</td><td><b>Yes</b></td></tr>
+        <tr><td>Priority queue after unallotment</td><td>No</td><td>No</td><td>No</td><td><b>Yes</b></td></tr>
+      </tbody>
+    </table>
+
+    <h3>3. AI Thesis — where AI is the moat, where it isn't</h3>
+    <p><b>AI does:</b> demand prediction (auto-scales infra before 10 AM rush), bank-health monitoring (warns slow banks pre-application), fraud-cluster detection (catches bot farms on retail quota), alternative ranking (within rule-gated set), persona-aware copy generation, post-event re-engagement timing.</p>
+    <p><b>AI doesn't:</b> allotment (regulator's domain), eligibility/KYC (deterministic), interest rate/yield (treasury's call), refund processing (NPCI-bound), risk-suitability gating (hard rules, not AI judgement).</p>
+    <div class="quote">"AI is the ranking engine. Rules are the gate. The gate decides who's allowed in; AI decides what they see first."</div>
+
+    <h3>4. Personas</h3>
+    <p>Three primary, mapped to depth of capital and confidence:</p>
+    <ul>
+      <li><b>Aarav (New, 24)</b> — first ₹10K bond. Needs plain English, no jargon, calm waits.</li>
+      <li><b>Priya (Moderate, 34)</b> — ₹1L allocations. Wants comparisons, alternatives, control.</li>
+      <li><b>Rohan (Advanced, 47, HNI)</b> — ₹25L tickets. Wants ISIN, YTM, modified duration, raw data, no hand-holding.</li>
+    </ul>
+
+    <h3>5. Core Journeys (priority order)</h3>
+    <ol>
+      <li><b>J1 · Successful subscription</b> — happy path, ~60% of attempts.</li>
+      <li><b>J2 · Stuck in UPI window</b> — the differentiated moment. Status + Plan B + honesty.</li>
+      <li><b>J3 · Allotment failed</b> — refund + alternatives + re-engagement. Recovery is product.</li>
+    </ol>
+
+    <h3>6. Success Metrics</h3>
+    <div class="kpi-row">
+      <div class="kpi"><div class="v">≥ 92%</div><div class="l">UPI confirmation rate (vs ~78% industry avg)</div></div>
+      <div class="kpi"><div class="v">&lt; 2 hr</div><div class="l">Median refund time for unallotted apps</div></div>
+      <div class="kpi"><div class="v">≥ 40%</div><div class="l">Unallotted users who re-engage on next tranche</div></div>
+      <div class="kpi"><div class="v">≤ 0.3%</div><div class="l">Fraud-flagged applications passing review</div></div>
+      <div class="kpi"><div class="v">+25%</div><div class="l">Retail conversion vs. nearest competitor</div></div>
+      <div class="kpi"><div class="v">≥ 4.6★</div><div class="l">App-store rating in first 6 months</div></div>
+      <div class="kpi"><div class="v">≥ 70%</div><div class="l">D30 retention for first-time bond buyers</div></div>
+      <div class="kpi"><div class="v">≥ 3.2x</div><div class="l">Avg products held / active user</div></div>
+    </div>
+
+    <h3>7. Risks &amp; Mitigations</h3>
+    <table>
+      <thead><tr><th>Risk</th><th>Likelihood</th><th>Mitigation</th></tr></thead>
+      <tbody>
+        <tr><td>Regulator views AI ranking as advisory → SEBI license trigger</td><td>Medium</td><td>Disclosure layer + rule-gated outputs + non-binding recommendation framing.</td></tr>
+        <tr><td>Bank UPI APIs degrade during tranche open</td><td>High</td><td>Multi-PSP failover, live health monitoring, pre-warn users on slow banks.</td></tr>
+        <tr><td>HNI customers feel retail UX</td><td>High</td><td>Persona-aware layouts; advanced mode toggle in settings.</td></tr>
+        <tr><td>Refund SLA missed → trust loss</td><td>Medium</td><td>Hard 2-hour ceiling; proactive WhatsApp + email if breach risk &gt; 30 min.</td></tr>
+        <tr><td>AI alternative misranks → suitability complaint</td><td>Low</td><td>Deterministic rule gate before AI ranking; audit log per recommendation.</td></tr>
+      </tbody>
+    </table>
+
+    <h3>8. Out of Scope (v1)</h3>
+    <ul>
+      <li>Secondary-market bond trading (post-allotment liquidity is v2).</li>
+      <li>International bonds &amp; offshore IPOs.</li>
+      <li>Robo-advisory full portfolio management.</li>
+    </ul>
+
+    <h3>9. Open Questions</h3>
+    <ul>
+      <li>Do we offer a "queue Plan B" feature, or does that violate SEBI's separate-application rule per tranche?</li>
+      <li>Is priority queue after an unallotment perceived as fair or as preferential treatment?</li>
+      <li>For HNI segment — do we build inside the app, or a separate "OneInvest Wealth" surface?</li>
+    </ul>
+  </div>
+
+  <footer>
+    OneInvest · End-to-end workflow &amp; PRD · drafted as an AI Product Manager artefact · 19 Jun 2026
+  </footer>
+
+</div>
+</body>
+</html>

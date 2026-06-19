@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OneInvest — PRD</title>
+<style>
+  :root {
+    --bg: #0b0d12; --panel: #11141b; --panel-2: #161a23;
+    --ink: #e7ecf3; --ink-dim: #9aa3b2; --ink-mute: #6b7280;
+    --line: #232836; --accent: #4ade80; --accent-2: #60a5fa;
+    --warn: #fbbf24; --bad: #f87171; --good: #34d399; --violet: #a78bfa; --gold: #fcd34d;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--ink); font-family: -apple-system, "Segoe UI", Roboto, system-ui, sans-serif; line-height: 1.55; }
+  .wrap { max-width: 980px; margin: 0 auto; padding: 32px 20px 80px; }
+  .brand { display: flex; align-items: center; gap: 14px; margin-bottom: 4px; }
+  .logo { width: 44px; height: 44px; border-radius: 12px; background: linear-gradient(135deg, #4ade80, #60a5fa); display: grid; place-items: center; font-weight: 800; color: #0b0d12; font-size: 20px; }
+  h1 { font-size: 28px; margin: 0; letter-spacing: -0.5px; }
+  .tagline { color: var(--ink-dim); font-size: 14px; margin: 4px 0 22px 58px; }
+  .nav { display: flex; gap: 8px; padding: 10px 0 24px; border-bottom: 1px solid var(--line); margin-bottom: 28px; flex-wrap: wrap; }
+  .nav a { font-size: 12px; color: var(--ink-dim); text-decoration: none; padding: 6px 12px; border: 1px solid var(--line); border-radius: 999px; }
+  .nav a:hover { color: var(--ink); border-color: var(--accent); }
+  .nav a.cur { background: var(--panel-2); color: var(--ink); border-color: var(--accent); }
+  h2 { font-size: 22px; margin: 36px 0 6px; letter-spacing: -0.3px; }
+  h2 .num { color: var(--ink-mute); font-weight: 500; margin-right: 10px; }
+  .sub { color: var(--ink-dim); font-size: 14px; margin: 0 0 20px; max-width: 780px; }
+  .prd { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 26px; }
+  .prd h3 { margin: 24px 0 6px; font-size: 16px; }
+  .prd h3:first-child { margin-top: 0; }
+  .prd p, .prd li { font-size: 13.5px; color: var(--ink); }
+  .meta { display: flex; gap: 16px; flex-wrap: wrap; font-size: 11px; color: var(--ink-dim); padding: 12px 14px; background: var(--panel-2); border-radius: 10px; margin-bottom: 20px; }
+  .meta b { color: var(--ink); }
+  ul { padding-left: 18px; margin: 6px 0; }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; margin: 10px 0; }
+  th, td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--line); }
+  th { color: var(--ink-mute); font-weight: 500; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 12px 0 18px; }
+  @media (max-width: 760px) { .kpi-row { grid-template-columns: repeat(2, 1fr); } }
+  .kpi { background: var(--panel-2); border: 1px solid var(--line); border-radius: 10px; padding: 12px; }
+  .kpi .v { font-size: 18px; font-weight: 700; color: var(--accent); }
+  .kpi .l { font-size: 11px; color: var(--ink-dim); margin-top: 2px; }
+  .quote { border-left: 3px solid var(--accent); padding: 6px 14px; color: var(--ink-dim); font-size: 13px; font-style: italic; margin: 14px 0; }
+  footer { margin-top: 56px; padding-top: 24px; border-top: 1px solid var(--line); font-size: 11px; color: var(--ink-mute); text-align: center; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="brand">
+    <div class="logo">OI</div>
+    <div><h1>OneInvest — Product Requirements Doc</h1></div>
+  </div>
+  <div class="tagline">AI-native IPO + Bond + Equity subscription platform · PRD v1</div>
+
+  <div class="nav">
+    <a href="oneinvest.html">📘 Journeys &amp; Workflow</a>
+    <a href="oneinvest-prototype.html">📱 Interactive Prototype</a>
+    <a class="cur" href="oneinvest-prd.html">📄 PRD</a>
+  </div>
+
+  <div class="prd">
+    <div class="meta">
+      <div><b>Author:</b> Sai Ganesh Motamarri · AI Product Manager</div>
+      <div><b>Date:</b> 19 Jun 2026</div>
+      <div><b>Status:</b> v1 · For review</div>
+      <div><b>Codename:</b> OneInvest</div>
+    </div>
+
+    <h3>1. Problem Statement</h3>
+    <p>India is in the middle of a fixed-income retail boom — RBI Retail Direct crossed 1.6M accounts and corporate-bond platforms (GoldenPi, Wint, Bondbazaar) are scaling fast. But the subscription experience is broken at the seams:</p>
+    <ul>
+      <li><b>The 60–120 second UPI gap</b> — between mandate and bank confirmation — is unmanaged. Users either refresh frantically or watch a silent spinner.</li>
+      <li><b>"Application could not be processed"</b> is the universal failure message — no explanation, no recovery path, no next issuance date.</li>
+      <li><b>Refunds for unallotted applications take 3–7 days</b> on most platforms, despite NPCI mandating 2 hours. Trust quietly erodes.</li>
+      <li><b>Allotment fairness is opaque</b> — investors don't know if FCFS, lottery, or pro-rata applied. Suspicion fills the vacuum.</li>
+      <li><b>No platform binds equities + IPOs + bonds + suitability + AI into one mental model.</b> Zerodha is deep in equity, Groww is broad but shallow, GoldenPi is bond-only.</li>
+    </ul>
+
+    <h3>2. Why OneInvest Wins</h3>
+    <table>
+      <thead><tr><th>Capability</th><th>Zerodha</th><th>Groww</th><th>GoldenPi</th><th>OneInvest</th></tr></thead>
+      <tbody>
+        <tr><td>Bond + Equity + IPO in one app</td><td>Partial</td><td>Yes</td><td>Bonds only</td><td><b>Yes, unified mental model</b></td></tr>
+        <tr><td>Live tranche fill % during UPI wait</td><td>No</td><td>No</td><td>No</td><td><b>Yes</b></td></tr>
+        <tr><td>AI bank-health latency warning</td><td>No</td><td>No</td><td>No</td><td><b>Yes</b></td></tr>
+        <tr><td>2-hour refund SLA visible in-app</td><td>No</td><td>No</td><td>No</td><td><b>Yes (NPCI-tracked)</b></td></tr>
+        <tr><td>Rule-gated AI alternatives on failure</td><td>No</td><td>Generic</td><td>No</td><td><b>Yes (suitability-filtered)</b></td></tr>
+        <tr><td>Persona-aware copy (new / mod / adv)</td><td>No</td><td>No</td><td>No</td><td><b>Yes</b></td></tr>
+        <tr><td>Priority queue after unallotment</td><td>No</td><td>No</td><td>No</td><td><b>Yes</b></td></tr>
+      </tbody>
+    </table>
+
+    <h3>3. AI Thesis — where AI is the moat, where it isn't</h3>
+    <p><b>AI does:</b> demand prediction (auto-scales infra before 10 AM rush), bank-health monitoring (warns slow banks pre-application), fraud-cluster detection (catches bot farms on retail quota), alternative ranking (within rule-gated set), persona-aware copy generation, post-event re-engagement timing.</p>
+    <p><b>AI doesn't:</b> allotment (regulator's domain), eligibility/KYC (deterministic), interest rate/yield (treasury's call), refund processing (NPCI-bound), risk-suitability gating (hard rules, not AI judgement).</p>
+    <div class="quote">"AI is the ranking engine. Rules are the gate. The gate decides who's allowed in; AI decides what they see first."</div>
+
+    <h3>4. Personas</h3>
+    <ul>
+      <li><b>Aarav (New, 24)</b> — first ₹10K bond. Needs plain English, no jargon, calm waits.</li>
+      <li><b>Priya (Moderate, 34)</b> — ₹1L allocations. Wants comparisons, alternatives, control.</li>
+      <li><b>Rohan (Advanced, 47, HNI)</b> — ₹25L tickets. Wants ISIN, YTM, modified duration, raw data, no hand-holding.</li>
+    </ul>
+
+    <h3>5. Core Journeys (priority order)</h3>
+    <ol>
+      <li><b>J1 · Successful subscription</b> — happy path, ~60% of attempts.</li>
+      <li><b>J2 · Stuck in UPI window</b> — the differentiated moment. Status + Plan B + honesty.</li>
+      <li><b>J3 · Allotment failed</b> — refund + alternatives + re-engagement. Recovery is product.</li>
+    </ol>
+
+    <h3>6. Success Metrics</h3>
+    <div class="kpi-row">
+      <div class="kpi"><div class="v">≥ 92%</div><div class="l">UPI confirmation rate (vs ~78% industry avg)</div></div>
+      <div class="kpi"><div class="v">&lt; 2 hr</div><div class="l">Median refund time for unallotted apps</div></div>
+      <div class="kpi"><div class="v">≥ 40%</div><div class="l">Unallotted users who re-engage on next tranche</div></div>
+      <div class="kpi"><div class="v">≤ 0.3%</div><div class="l">Fraud-flagged applications passing review</div></div>
+      <div class="kpi"><div class="v">+25%</div><div class="l">Retail conversion vs. nearest competitor</div></div>
+      <div class="kpi"><div class="v">≥ 4.6★</div><div class="l">App-store rating in first 6 months</div></div>
+      <div class="kpi"><div class="v">≥ 70%</div><div class="l">D30 retention for first-time bond buyers</div></div>
+      <div class="kpi"><div class="v">≥ 3.2x</div><div class="l">Avg products held / active user</div></div>
+    </div>
+
+    <h3>7. Risks &amp; Mitigations</h3>
+    <table>
+      <thead><tr><th>Risk</th><th>Likelihood</th><th>Mitigation</th></tr></thead>
+      <tbody>
+        <tr><td>Regulator views AI ranking as advisory → SEBI license trigger</td><td>Medium</td><td>Disclosure layer + rule-gated outputs + non-binding recommendation framing.</td></tr>
+        <tr><td>Bank UPI APIs degrade during tranche open</td><td>High</td><td>Multi-PSP failover, live health monitoring, pre-warn users on slow banks.</td></tr>
+        <tr><td>HNI customers feel retail UX</td><td>High</td><td>Persona-aware layouts; advanced mode toggle in settings.</td></tr>
+        <tr><td>Refund SLA missed → trust loss</td><td>Medium</td><td>Hard 2-hour ceiling; proactive WhatsApp + email if breach risk &gt; 30 min.</td></tr>
+        <tr><td>AI alternative misranks → suitability complaint</td><td>Low</td><td>Deterministic rule gate before AI ranking; audit log per recommendation.</td></tr>
+      </tbody>
+    </table>
+
+    <h3>8. Out of Scope (v1)</h3>
+    <ul>
+      <li>Secondary-market bond trading (post-allotment liquidity is v2).</li>
+      <li>International bonds &amp; offshore IPOs.</li>
+      <li>Robo-advisory full portfolio management.</li>
+    </ul>
+
+    <h3>9. Open Questions</h3>
+    <ul>
+      <li>Do we offer a "queue Plan B" feature, or does that violate SEBI's separate-application rule per tranche?</li>
+      <li>Is priority queue after an unallotment perceived as fair or as preferential treatment?</li>
+      <li>For HNI segment — do we build inside the app, or a separate "OneInvest Wealth" surface?</li>
+    </ul>
+  </div>
+
+  <footer>OneInvest PRD v1 · drafted as an AI Product Manager artefact · 19 Jun 2026</footer>
+</div>
+</body>
+</html>
