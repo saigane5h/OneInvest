@@ -415,7 +415,7 @@
 
           <div style="display:flex; gap:8px; margin-top:16px;">
             <button class="btn ghost" data-goto="s-home">← Home</button>
-            <button class="btn">View portfolio</button>
+            <button class="btn" data-goto="s-portfolio">View portfolio</button>
           </div>
         </div>
       </div>
@@ -475,6 +475,143 @@
           </div>
 
           <button class="btn ghost" style="margin-top:14px;" data-goto="s-home">← Back to home</button>
+        </div>
+      </div>
+
+      <!-- PORTFOLIO -->
+      <div class="screen" id="s-portfolio">
+        <div class="app-bar">
+          <button class="back" data-goto="s-home">←</button>
+          <div class="title">Portfolio</div>
+          <div class="right new-only">Total · ₹50,000</div>
+          <div class="right mod-only">Total · ₹9,12,400</div>
+          <div class="right adv-only">Total · ₹4.21 Cr</div>
+        </div>
+        <div class="scroll">
+
+          <!-- AARAV: NEW -->
+          <div class="new-only">
+            <div style="background:linear-gradient(135deg, rgba(74,222,128,0.14), rgba(96,165,250,0.10)); border:1px solid rgba(74,222,128,0.35); border-radius:14px; padding:18px; margin-bottom:16px;">
+              <div style="font-size:11px; color:var(--ink-dim); text-transform:uppercase; letter-spacing:0.5px;">Your money so far</div>
+              <div style="font-size:28px; font-weight:800; margin:4px 0;">₹50,000</div>
+              <div style="font-size:12px; color:var(--good);">+ ₹430 earned · since you started</div>
+            </div>
+
+            <div class="section-head"><h4>What you own</h4><a href="#">Details</a></div>
+
+            <div class="alt-card" style="border-color:rgba(74,222,128,0.4); cursor:default;">
+              <div class="top">
+                <h5>RBI Floating Rate Bond <span class="pill good" style="font-size:9px;">NEW</span></h5>
+                <div class="yld">8.05%</div>
+              </div>
+              <div class="meta">You bought 10 units · ₹10,000<br>Next interest: <b style="color:var(--ink);">₹201 on 19 Dec 2026</b></div>
+            </div>
+
+            <div class="alt-card" style="cursor:default;">
+              <div class="top"><h5>Parag Parikh Flexi Cap</h5><div class="yld">+12.4%</div></div>
+              <div class="meta">₹20,000 invested · mutual fund</div>
+            </div>
+
+            <div class="alt-card" style="cursor:default;">
+              <div class="top"><h5>Axis Bluechip Fund</h5><div class="yld">+9.1%</div></div>
+              <div class="meta">₹20,000 invested · mutual fund</div>
+            </div>
+
+            <div class="note good" style="margin-top:14px;">
+              <b>What happens next</b>
+              Every 6 months, the RBI bond pays you interest into your bank account. Nothing you need to do.
+            </div>
+          </div>
+
+          <!-- PRIYA: MODERATE -->
+          <div class="mod-only">
+            <div style="display:flex; gap:8px; margin-bottom:14px;">
+              <div style="flex:1; background:var(--panel-2); border:1px solid var(--line); border-radius:10px; padding:12px;">
+                <div style="font-size:10px; color:var(--ink-dim); text-transform:uppercase;">Total value</div>
+                <div style="font-size:18px; font-weight:700;">₹9,12,400</div>
+                <div style="font-size:11px; color:var(--good);">+ ₹62,400 (7.4%)</div>
+              </div>
+              <div style="flex:1; background:var(--panel-2); border:1px solid var(--line); border-radius:10px; padding:12px;">
+                <div style="font-size:10px; color:var(--ink-dim); text-transform:uppercase;">Blended yield</div>
+                <div style="font-size:18px; font-weight:700;">7.92%</div>
+                <div style="font-size:11px; color:var(--ink-dim);">post-tax 6.41%</div>
+              </div>
+            </div>
+
+            <div style="display:flex; gap:6px; margin-bottom:14px;">
+              <span class="pill" style="border-color:var(--accent); color:var(--ink);">Bonds (42%)</span>
+              <span class="pill">Equity (38%)</span>
+              <span class="pill">MF (20%)</span>
+            </div>
+
+            <div class="section-head"><h4>Fixed income · ₹3,82,000</h4><a href="#">Sort</a></div>
+
+            <div class="alt-card" style="border-color:rgba(74,222,128,0.4); cursor:default;">
+              <div class="top">
+                <h5>RBI Floating Rate Bond <span class="pill good" style="font-size:9px;">JUST BOUGHT</span></h5>
+                <div class="yld">8.05%</div>
+              </div>
+              <div class="meta">₹1,00,000 · 10 yrs · next coupon 19 Dec · ₹2,012</div>
+            </div>
+            <div class="alt-card" style="cursor:default;">
+              <div class="top"><h5>HDFC NCD 2030</h5><div class="yld">8.40%</div></div>
+              <div class="meta">₹1,50,000 · 5 yrs · AA+ · semi-annual</div>
+            </div>
+            <div class="alt-card" style="cursor:default;">
+              <div class="top"><h5>SDL Karnataka 2031</h5><div class="yld">7.65%</div></div>
+              <div class="meta">₹1,32,000 · 7 yrs · sovereign</div>
+            </div>
+
+            <div class="note" style="margin-top:14px;">
+              <span class="ai-tag">AI</span><b>Coupon laddering opportunity</b>
+              Your three bonds pay coupons in Jun, Sep, Dec. Adding a Mar-coupon NCD evens out your monthly cashflow.
+            </div>
+          </div>
+
+          <!-- ROHAN: ADVANCED -->
+          <div class="adv-only">
+            <div class="receipt" style="margin-bottom:14px;">
+              <div class="ln"><span>Total portfolio value</span><b>₹4,21,38,200</b></div>
+              <div class="ln"><span>XIRR (lifetime)</span><b style="color:var(--good);">+14.2%</b></div>
+              <div class="ln"><span>Fixed-income allocation</span><b>₹1,68,55,280 (40%)</b></div>
+              <div class="ln"><span>Modified duration · bond book</span><b>5.42</b></div>
+              <div class="ln"><span>Blended YTM · bond book</span><b>8.14%</b></div>
+              <div class="ln"><span>Credit mix</span><b>62% sovereign · 38% AAA/AA+</b></div>
+            </div>
+
+            <div class="section-head"><h4>Bond ladder</h4><a href="#">Export CSV</a></div>
+
+            <div style="background:var(--panel-2); border:1px solid var(--line); border-radius:10px; overflow:hidden; font-size:11px;">
+              <div style="display:grid; grid-template-columns:2fr 0.8fr 0.7fr 0.7fr; padding:8px 10px; color:var(--ink-mute); font-size:10px; text-transform:uppercase; letter-spacing:0.5px; border-bottom:1px solid var(--line);">
+                <div>ISIN / Security</div><div>Units</div><div>YTM</div><div>MD</div>
+              </div>
+              <div style="display:grid; grid-template-columns:2fr 0.8fr 0.7fr 0.7fr; padding:10px; border-bottom:1px solid var(--line); background:rgba(74,222,128,0.05);">
+                <div>IN0020230069 · RBI FRB 2034 <span class="pill good" style="font-size:8px;">NEW</span></div><div>2,500</div><div>8.05%</div><div>6.84</div>
+              </div>
+              <div style="display:grid; grid-template-columns:2fr 0.8fr 0.7fr 0.7fr; padding:10px; border-bottom:1px solid var(--line);">
+                <div>INE001A07S77 · HDFC NCD 2030</div><div>4,200</div><div>8.40%</div><div>4.12</div>
+              </div>
+              <div style="display:grid; grid-template-columns:2fr 0.8fr 0.7fr 0.7fr; padding:10px; border-bottom:1px solid var(--line);">
+                <div>IN1020230053 · SDL KA 2031</div><div>3,100</div><div>7.65%</div><div>5.88</div>
+              </div>
+              <div style="display:grid; grid-template-columns:2fr 0.8fr 0.7fr 0.7fr; padding:10px;">
+                <div>INE020B07JC9 · REC Tax-Free 2028</div><div>1,800</div><div>7.12%</div><div>3.45</div>
+              </div>
+            </div>
+
+            <div class="note" style="margin-top:14px;">
+              <span class="ai-tag">AI</span><b>Duration concentration risk · medium</b>
+              MD 5.4 vs target 4.5. A 50bps rate move would impact MTM by ~₹4.6L. Consider trimming the 2031 SDL.
+            </div>
+
+            <div style="display:flex; gap:8px; margin-top:12px;">
+              <button class="btn sm ghost">Tax statement</button>
+              <button class="btn sm ghost">Coupon calendar</button>
+              <button class="btn sm ghost">Risk report</button>
+            </div>
+          </div>
+
+          <button class="btn ghost" style="margin-top:18px;" data-goto="s-home">← Back to home</button>
         </div>
       </div>
 
@@ -558,6 +695,14 @@
         ['Aarav (New)', 'Soft message: "Too many people applied. Nothing you did wrong." 2 simpler alternatives. Refund ETA.'],
         ['Priya (Moderate)', '3 AI-ranked alternatives (sovereign + AAA + NCD). "Notify 30 min early" for next auction.'],
         ['Rohan (Advanced)', 'Timing-gap receipt: confirm time vs tranche close. UTR number. Priority-queue flag. HNI-only alternatives.'],
+      ],
+    },
+    's-portfolio': {
+      title: 'Portfolio',
+      rows: [
+        ['Aarav (New)', 'Big hero number ("₹50,000 · grew ₹430"). 3 holding cards in plain language. No jargon, no charts. "What happens next" explainer.'],
+        ['Priya (Moderate)', 'Two KPI tiles (value, blended yield). Asset-mix pills. Sectioned by Fixed income / Equity / MF. AI coupon-laddering nudge.'],
+        ['Rohan (Advanced)', 'Dense receipt: portfolio value, XIRR, modified duration, credit mix. Bond-ladder table with ISIN/YTM/MD. AI duration-risk warning. Tax/coupon/risk reports.'],
       ],
     },
   };
