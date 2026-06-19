@@ -61,6 +61,7 @@
     background: var(--panel); border: 1px solid var(--line); border-radius: 28px;
     overflow: hidden; box-shadow: 0 30px 80px rgba(0,0,0,0.45);
     display: flex; flex-direction: column; min-height: 720px;
+    position: relative;
   }
   .status-bar { display: flex; justify-content: space-between; padding: 12px 22px 6px; font-size: 11px; color: var(--ink-dim); }
   .app-bar { display: flex; align-items: center; padding: 8px 18px 14px; border-bottom: 1px solid var(--line); }
@@ -174,6 +175,72 @@
   body[data-persona="adv"] .mod-only { display: none; }
 
   .help { font-size: 11px; color: var(--ink-dim); margin-top: 4px; }
+
+  /* ===== Niv assistant ===== */
+  .niv-fab {
+    position: absolute; bottom: 16px; right: 16px;
+    background: linear-gradient(135deg, #a78bfa, #60a5fa);
+    color: #0b0d12; width: 52px; height: 52px; border-radius: 50%;
+    display: grid; place-items: center; font-size: 22px; cursor: pointer;
+    box-shadow: 0 8px 24px rgba(167,139,250,0.45); border: 0;
+    z-index: 5;
+  }
+  .niv-fab .pulse { position: absolute; inset: -4px; border-radius: 50%; border: 2px solid var(--violet); opacity: 0.6; animation: pulse 1.6s ease-out infinite; }
+  @keyframes pulse { 0% { transform: scale(1); opacity: 0.6; } 100% { transform: scale(1.4); opacity: 0; } }
+  .niv-fab .badge { position: absolute; top: -2px; right: -2px; background: var(--bad); color: #fff; font-size: 10px; width: 18px; height: 18px; border-radius: 50%; display: grid; place-items: center; font-weight: 700; }
+
+  .niv-card {
+    background: linear-gradient(135deg, rgba(167,139,250,0.10), rgba(96,165,250,0.06));
+    border: 1px solid rgba(167,139,250,0.35);
+    border-radius: 12px; padding: 14px; margin: 12px 0; cursor: pointer;
+    transition: border-color 0.15s;
+  }
+  .niv-card:hover { border-color: var(--violet); }
+  .niv-card .nv-top { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .niv-card .nv-av { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #a78bfa, #60a5fa); display: grid; place-items: center; font-size: 14px; color: #0b0d12; font-weight: 800; }
+  .niv-card .nv-nm { font-size: 12px; font-weight: 700; }
+  .niv-card .nv-tag { font-size: 9px; color: var(--violet); background: rgba(167,139,250,0.18); padding: 2px 6px; border-radius: 4px; font-weight: 700; letter-spacing: 0.4px; margin-left: auto; }
+  .niv-card .nv-msg { font-size: 12.5px; line-height: 1.5; color: var(--ink); }
+  .niv-card .nv-cta { font-size: 11px; color: var(--violet); margin-top: 8px; font-weight: 600; }
+
+  .niv-sheet {
+    position: absolute; inset: 0; background: var(--panel);
+    display: flex; flex-direction: column; z-index: 10;
+    transform: translateY(100%); transition: transform 0.25s ease;
+  }
+  .niv-sheet.open { transform: translateY(0); }
+  .niv-sheet .nv-bar { padding: 14px 18px; border-bottom: 1px solid var(--line); display: flex; align-items: center; gap: 12px; background: var(--panel-2); }
+  .niv-sheet .nv-bar .av { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #a78bfa, #60a5fa); display: grid; place-items: center; font-weight: 800; color: #0b0d12; font-size: 16px; }
+  .niv-sheet .nv-bar .nm { font-weight: 700; font-size: 14px; }
+  .niv-sheet .nv-bar .st { font-size: 11px; color: var(--good); }
+  .niv-sheet .nv-bar .close { margin-left: auto; background: transparent; border: 0; color: var(--ink-dim); font-size: 22px; cursor: pointer; }
+  .niv-sheet .nv-body { flex: 1; overflow-y: auto; padding: 16px 14px; display: flex; flex-direction: column; gap: 10px; background: var(--bg); }
+  .bubble { max-width: 82%; padding: 10px 12px; border-radius: 14px; font-size: 13px; line-height: 1.45; animation: bubble 0.3s ease; }
+  @keyframes bubble { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+  .b-bot { align-self: flex-start; background: var(--panel-2); border: 1px solid var(--line); border-bottom-left-radius: 4px; }
+  .b-user { align-self: flex-end; background: var(--accent); color: #0b0d12; border-bottom-right-radius: 4px; font-weight: 600; }
+  .b-typing { align-self: flex-start; background: var(--panel-2); border: 1px solid var(--line); padding: 12px 14px; border-radius: 14px; border-bottom-left-radius: 4px; }
+  .b-typing span { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--ink-dim); margin: 0 1px; animation: dot 1.2s infinite; }
+  .b-typing span:nth-child(2) { animation-delay: 0.2s; }
+  .b-typing span:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes dot { 0%, 60%, 100% { transform: translateY(0); opacity: 0.4; } 30% { transform: translateY(-4px); opacity: 1; } }
+
+  .b-card {
+    align-self: stretch; background: var(--panel-2); border: 1px solid var(--line); border-radius: 12px; padding: 12px; font-size: 12px;
+  }
+  .b-card .top { display: flex; justify-content: space-between; }
+  .b-card h6 { margin: 0 0 2px; font-size: 13px; }
+  .b-card .yld { color: var(--good); font-weight: 700; }
+  .b-card .why { font-size: 11px; color: var(--ink-dim); margin-top: 6px; font-style: italic; }
+  .b-card .row2 { display: flex; gap: 6px; margin-top: 8px; }
+
+  .quick-replies { display: flex; gap: 6px; flex-wrap: wrap; padding: 10px 14px 6px; border-top: 1px solid var(--line); background: var(--panel-2); }
+  .qr { background: var(--panel); border: 1px solid var(--line); color: var(--ink); padding: 8px 12px; border-radius: 999px; font-size: 12px; cursor: pointer; }
+  .qr:hover { border-color: var(--violet); }
+  .nv-input { display: flex; padding: 10px 14px 14px; gap: 8px; background: var(--panel-2); }
+  .nv-input input { flex: 1; background: var(--panel); border: 1px solid var(--line); color: var(--ink); padding: 10px 14px; border-radius: 999px; font-size: 13px; font-family: inherit; }
+  .nv-input input:focus { outline: 0; border-color: var(--violet); }
+  .nv-input button { background: var(--violet); color: #0b0d12; border: 0; width: 40px; border-radius: 50%; cursor: pointer; font-size: 18px; }
 </style>
 </head>
 <body data-persona="new" data-journey="success">
@@ -358,10 +425,14 @@
           <div id="wait-note"></div>
 
           <div id="planb-block" style="display:none;">
-            <h4 style="font-size:12px; text-transform:uppercase; letter-spacing:0.5px; color:var(--ink-mute); margin: 16px 0 8px;">If this doesn't go through</h4>
-            <div class="alt-card">
-              <div class="top"><h5>SDL Maharashtra 2032 <span class="ai-score">95% match</span></h5><div class="yld">7.92%</div></div>
-              <div class="meta">Sovereign · 8 yrs · open till 26 Jun</div>
+            <div class="niv-card" data-niv-open="wait">
+              <div class="nv-top">
+                <div class="nv-av">N</div>
+                <div class="nv-nm">Niv</div>
+                <div class="nv-tag">ASSIST</div>
+              </div>
+              <div class="nv-msg" id="niv-prev-wait">I'm watching your transaction. Want me to line up a backup option in case this one doesn't go through?</div>
+              <div class="nv-cta">Tap to chat →</div>
             </div>
           </div>
         </div>
@@ -454,24 +525,14 @@
             </div>
           </div>
 
-          <h4 style="font-size:12px; text-transform:uppercase; letter-spacing:0.5px; color:var(--ink-mute); margin: 16px 0 8px;"><span class="ai-tag">AI</span> Open now · similar to what you wanted</h4>
-
-          <div class="alt-card">
-            <div class="top"><h5>SDL Maharashtra 2032 <span class="ai-score">95% match</span></h5><div class="yld">7.92%</div></div>
-            <div class="meta">Sovereign · 8 yrs · ₹1,000 min · closes 26 Jun</div>
-          </div>
-          <div class="alt-card">
-            <div class="top"><h5>NHAI InvIT Bond 2033 <span class="ai-score">88% match</span></h5><div class="yld">8.15%</div></div>
-            <div class="meta">AAA · 9 yrs · ₹10,000 min · closes 23 Jun</div>
-          </div>
-          <div class="alt-card mod-only adv-only">
-            <div class="top"><h5>Tata Capital NCD 2031 <span class="ai-score">81% match</span></h5><div class="yld">8.65%</div></div>
-            <div class="meta">AA+ · 7 yrs · ₹10,000 min · closes 28 Jun</div>
-          </div>
-
-          <div class="note" style="margin-top:14px;">
-            <b>Next RBI Floating Rate auction: 15 Jul 2026, 10 AM</b>
-            <button class="btn sm" style="margin-top:8px;">🔔 Notify me 30 min early</button>
+          <div class="niv-card" data-niv-open="fail" style="margin-top:16px;">
+            <div class="nv-top">
+              <div class="nv-av">N</div>
+              <div class="nv-nm">Niv</div>
+              <div class="nv-tag">ASSIST</div>
+            </div>
+            <div class="nv-msg" id="niv-prev-fail">Tough one — but I've got you. I can show you 3 similar bonds that are still open, and remind you 30 min before the next RBI auction. Want to chat?</div>
+            <div class="nv-cta">Open chat →</div>
           </div>
 
           <button class="btn ghost" style="margin-top:14px;" data-goto="s-home">← Back to home</button>
@@ -615,6 +676,31 @@
         </div>
       </div>
 
+      <!-- NIV FAB -->
+      <button class="niv-fab" id="niv-fab" title="Ask Niv">
+        <span class="pulse"></span>
+        <span style="position:relative;">✨</span>
+        <span class="badge" id="niv-badge" style="display:none;">1</span>
+      </button>
+
+      <!-- NIV CHAT SHEET -->
+      <div class="niv-sheet" id="niv-sheet">
+        <div class="nv-bar">
+          <div class="av">N</div>
+          <div>
+            <div class="nm">Niv · OneInvest Assist</div>
+            <div class="st">● Online · powered by AI</div>
+          </div>
+          <button class="close" id="niv-close">✕</button>
+        </div>
+        <div class="nv-body" id="niv-body"></div>
+        <div class="quick-replies" id="niv-chips"></div>
+        <div class="nv-input">
+          <input type="text" placeholder="Ask Niv anything..." id="niv-text">
+          <button id="niv-send">→</button>
+        </div>
+      </div>
+
     </div>
   </div>
 
@@ -750,6 +836,190 @@
   });
 
   updateDiff('s-home');
+
+  // ===== Niv assistant =====
+  const nivSheet = document.getElementById('niv-sheet');
+  const nivBody = document.getElementById('niv-body');
+  const nivChips = document.getElementById('niv-chips');
+  const nivBadge = document.getElementById('niv-badge');
+
+  const nivScripts = {
+    'wait-new': {
+      open: "Hey Aarav 👋 I see your bond is still processing. Banks take about a minute — your money is safe. Want me to explain what's happening?",
+      chips: ['What\'s happening?', 'Is my money safe?', 'How long more?'],
+      replies: {
+        'What\'s happening?': "Your bank is confirming the payment with UPI. Once it confirms, you get the bond. If too many people apply, you might miss out — and we refund within 2 hours. No effort needed from you.",
+        'Is my money safe?': "100%. UPI has only *blocked* ₹10,000 — not debited. It moves only if you get the bond. If not, the block releases automatically.",
+        'How long more?': "Usually under 90 seconds. I'll buzz you the moment it's done — you can close the app.",
+      },
+    },
+    'wait-mod': {
+      open: "Hi Priya. I'm tracking your transaction live. Tranche is at 78% filled and your bank hasn't confirmed yet. Want me to queue a Plan B in case this doesn't go through?",
+      chips: ['Show Plan B', 'Why is bank slow?', 'Cancel'],
+      replies: {
+        'Show Plan B': { type: 'card', title: 'SDL Maharashtra 2032', yld: '7.92%', meta: 'Sovereign · 8 yrs · open till 26 Jun', why: 'Closest match on yield, tenure, credit rating. Lower min ticket so you can re-allocate quickly.' },
+        'Why is bank slow?': "Today HDFC UPI median is 38s, SBI is 71s. Yours is HDFC, so you're on the faster lane — but the tranche is filling quickly because of high demand.",
+        'Cancel': "I can request a cancellation. Your UPI block releases instantly — no debit, no refund wait.",
+      },
+    },
+    'wait-adv': {
+      open: "Rohan — tracking now. HDFC UPI latency 38s median, yours sitting at 47s. Tranche at 78%, fill velocity 4.2%/sec. Risk of close-before-confirm: moderate. Plan B?",
+      chips: ['Plan B (HNI)', 'Latency breakdown', 'Cancel'],
+      replies: {
+        'Plan B (HNI)': { type: 'card', title: 'NHAI InvIT 2033 · HNI tranche', yld: '8.15%', meta: 'AAA · 9 yrs · ₹2L min · closes 23 Jun', why: 'HNI-eligible only. Modified duration 5.71 — closer to your ladder target than RBI FRB 2034.' },
+        'Latency breakdown': "HDFC UPI: 38s median today, 99th pctl 84s. NPCI-side processing 12s. Issuer-side 4s. Your bank likely network-bound on the last hop.",
+        'Cancel': "Cancellation request sent to gateway. Block releases in ~3s.",
+      },
+    },
+    'fail-new': {
+      open: "Aarav, you didn't get the bond this time. ₹10,000 is coming back to your account within 2 hours. Nothing you did wrong — too many people applied. Want me to find something similar?",
+      chips: ['Yes, show options', 'When is the next one?', 'I\'m done'],
+      replies: {
+        'Yes, show options': { type: 'card', title: 'SDL Maharashtra 2032', yld: '7.92%', meta: 'Government bond · safer like the last one · ₹1,000 min', why: 'Same kind of bond (government), close yield, smaller minimum so you can try with whatever amount you\'re comfortable with.' },
+        'When is the next one?': "The next RBI Floating Rate auction is 15 Jul 2026 at 10 AM. I can notify you 30 min before — and auto-apply you when it opens, if you want.",
+        'I\'m done': "All good. Your refund will land in your bank in under 2 hours. I'll be here whenever you want to try again.",
+      },
+    },
+    'fail-mod': {
+      open: "Priya — tranche closed 18s before your bank confirmed. Refund initiated. I've found 3 similar bonds open today. Filtered by your risk profile and matched on yield + tenure. Show them?",
+      chips: ['Show 3 alternatives', 'Auto-apply next RBI', 'Why did I miss?'],
+      replies: {
+        'Show 3 alternatives': { type: 'multi', items: [
+          { title: 'SDL Maharashtra 2032', yld: '7.92%', meta: 'Sovereign · 8 yrs', why: '95% match — closest to what you wanted.' },
+          { title: 'NHAI InvIT 2033', yld: '8.15%', meta: 'AAA · 9 yrs', why: '88% match — higher yield, slightly longer tenure.' },
+          { title: 'Tata Capital NCD 2031', yld: '8.65%', meta: 'AA+ · 7 yrs', why: '81% match — best yield, one notch lower on rating.' },
+        ]},
+        'Auto-apply next RBI': "Done. When the 15 Jul RBI tranche opens, I'll apply for the same ₹1L. You can cancel anytime.",
+        'Why did I miss?': "Tranche velocity hit 4.2%/sec today vs the usual 1.8%. Your bank confirmed 18s after the tranche filled. Not a bank issue — just record demand.",
+      },
+    },
+    'fail-adv': {
+      open: "Rohan — confirm timestamp 10:01:41, tranche close 10:01:23. +18s late. UTR UPI/426193, refund SLA 2h. Priority queue auto-enabled for next HNI tranche. 3 HNI-eligible alts ready. Show?",
+      chips: ['Show HNI alternatives', 'Coupon schedule view', 'Risk report'],
+      replies: {
+        'Show HNI alternatives': { type: 'multi', items: [
+          { title: 'NHAI InvIT 2033 · HNI', yld: '8.15%', meta: 'AAA · MD 5.71 · ₹2L min', why: 'Closest MD to RBI FRB 2034. Same credit floor.' },
+          { title: 'PFC Tax-Free 2030 · HNI', yld: '6.85%', meta: 'AAA · MD 4.22 · ₹10L min', why: 'Post-tax effective yield 6.85% vs RBI FRB 5.48% (post-tax). Better for your 30% slab.' },
+          { title: 'Tata Steel NCD 2031 · QIB', yld: '8.92%', meta: 'AA · MD 5.04 · ₹2L min', why: 'Highest yield, one notch down on rating. Issuer cashflow coverage 2.8x.' },
+        ]},
+        'Coupon schedule view': "Your current bond book pays coupons in Mar/Jun/Sep/Dec. Adding the NHAI InvIT keeps the calendar even.",
+        'Risk report': "Portfolio MD 5.42 vs target 4.5. Concentration risk: 38% in sovereign 2030+. A 50bps move = -₹4.6L MTM impact.",
+      },
+    },
+  };
+
+  function nivKey() {
+    const sc = body.dataset.journey === 'fail' ? 'fail' : (body.dataset.journey === 'stuck' ? 'wait' : 'wait');
+    return sc + '-' + body.dataset.persona;
+  }
+
+  function nivBubble(html, who, delay) {
+    setTimeout(() => {
+      const d = document.createElement('div');
+      d.className = 'bubble ' + (who === 'user' ? 'b-user' : 'b-bot');
+      d.innerHTML = html;
+      nivBody.appendChild(d);
+      nivBody.scrollTop = nivBody.scrollHeight;
+    }, delay);
+  }
+
+  function nivTyping(delay) {
+    setTimeout(() => {
+      const t = document.createElement('div');
+      t.className = 'b-typing'; t.id = 'niv-typing';
+      t.innerHTML = '<span></span><span></span><span></span>';
+      nivBody.appendChild(t);
+      nivBody.scrollTop = nivBody.scrollHeight;
+    }, delay);
+  }
+
+  function nivClearTyping() {
+    const t = document.getElementById('niv-typing'); if (t) t.remove();
+  }
+
+  function nivCard(card) {
+    const d = document.createElement('div');
+    d.className = 'b-card';
+    d.innerHTML =
+      '<div class="top"><h6>' + card.title + '</h6><div class="yld">' + card.yld + '</div></div>' +
+      '<div style="font-size:11px; color:var(--ink-dim);">' + card.meta + '</div>' +
+      '<div class="why">"' + card.why + '"</div>' +
+      '<div class="row2"><button class="btn sm">Invest →</button><button class="btn sm ghost">Details</button></div>';
+    nivBody.appendChild(d);
+    nivBody.scrollTop = nivBody.scrollHeight;
+  }
+
+  function renderChips(chips) {
+    nivChips.innerHTML = '';
+    chips.forEach(c => {
+      const b = document.createElement('button');
+      b.className = 'qr'; b.textContent = c;
+      b.onclick = () => handleReply(c);
+      nivChips.appendChild(b);
+    });
+  }
+
+  function handleReply(text) {
+    nivBubble(text, 'user', 0);
+    nivChips.innerHTML = '';
+    const script = nivScripts[nivKey()];
+    const r = script && script.replies[text];
+    if (!r) {
+      nivTyping(300);
+      setTimeout(() => { nivClearTyping(); nivBubble("Let me get back to you on that — checking with the team.", 'bot', 0); renderChips(script ? script.chips : []); }, 1100);
+      return;
+    }
+    nivTyping(400);
+    setTimeout(() => {
+      nivClearTyping();
+      if (typeof r === 'string') nivBubble(r, 'bot', 0);
+      else if (r.type === 'card') { nivBubble("Here's the closest match:", 'bot', 0); setTimeout(() => nivCard(r), 200); }
+      else if (r.type === 'multi') { nivBubble("Top 3, ranked by similarity:", 'bot', 0); r.items.forEach((it, i) => setTimeout(() => nivCard(it), 200 + i * 250)); }
+      renderChips(script.chips);
+    }, 1200);
+  }
+
+  function openNiv() {
+    nivSheet.classList.add('open');
+    nivBadge.style.display = 'none';
+    if (nivBody.children.length > 0) return;
+    const script = nivScripts[nivKey()];
+    if (!script) {
+      nivBubble("Hi! I'm Niv. Ask me anything about your investments.", 'bot', 0);
+      return;
+    }
+    nivTyping(200);
+    setTimeout(() => { nivClearTyping(); nivBubble(script.open, 'bot', 0); renderChips(script.chips); }, 1000);
+  }
+
+  function closeNiv() { nivSheet.classList.remove('open'); }
+
+  document.getElementById('niv-fab').addEventListener('click', openNiv);
+  document.getElementById('niv-close').addEventListener('click', closeNiv);
+  document.querySelectorAll('[data-niv-open]').forEach(el => el.addEventListener('click', openNiv));
+
+  document.getElementById('niv-send').addEventListener('click', () => {
+    const v = document.getElementById('niv-text').value.trim();
+    if (!v) return;
+    document.getElementById('niv-text').value = '';
+    handleReply(v);
+  });
+  document.getElementById('niv-text').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') document.getElementById('niv-send').click();
+  });
+
+  // Reset chat history when scenario or persona changes
+  function resetNiv() { nivBody.innerHTML = ''; nivChips.innerHTML = ''; nivBadge.style.display = ''; nivBadge.textContent = '1'; }
+  document.querySelectorAll('.opt[data-persona], .opt[data-journey]').forEach(el => el.addEventListener('click', resetNiv));
+
+  // Update Niv preview cards based on context
+  function refreshNivPreviews() {
+    const s = nivScripts[nivKey()];
+    if (!s) return;
+    const pw = document.getElementById('niv-prev-wait'); if (pw) pw.textContent = s.open;
+    const pf = document.getElementById('niv-prev-fail'); if (pf && body.dataset.journey === 'fail') pf.textContent = s.open;
+  }
+  document.querySelectorAll('.opt[data-persona], .opt[data-journey]').forEach(el => el.addEventListener('click', refreshNivPreviews));
 
   // Journey switcher
   document.querySelectorAll('.opt[data-journey]').forEach(el => {
