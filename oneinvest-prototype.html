@@ -25,6 +25,17 @@
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; background: var(--bg); color: var(--ink); font-family: -apple-system, "Segoe UI", Roboto, system-ui, sans-serif; line-height: 1.45; -webkit-font-smoothing: antialiased; }
 
+  /* Unified page header (shared across all 3 pages) */
+  .page-header { max-width: 1240px; margin: 0 auto; padding: 28px 20px 0; }
+  .page-header .brand { display: flex; align-items: center; gap: 14px; }
+  .page-header .logo { width: 44px; height: 44px; border-radius: 12px; background: linear-gradient(135deg, #4ade80 0%, #60a5fa 100%); display: grid; place-items: center; font-weight: 800; color: #0b0d12; font-size: 20px; }
+  .page-header h1 { font-size: 28px; margin: 0; letter-spacing: -0.5px; }
+  .page-header .tagline { color: var(--ink-dim); font-size: 13px; margin-top: 2px; }
+  .page-header .nav { display: flex; gap: 8px; padding: 18px 0 14px; border-bottom: 1px solid var(--line); margin-top: 18px; flex-wrap: wrap; }
+  .page-header .nav a { font-size: 12px; color: var(--ink-dim); text-decoration: none; padding: 6px 12px; border: 1px solid var(--line); border-radius: 999px; }
+  .page-header .nav a:hover { color: var(--ink); border-color: var(--accent); }
+  .page-header .nav a.cur { background: var(--panel-2); color: var(--ink); border-color: var(--accent); }
+
   .layout {
     display: grid; grid-template-columns: 280px 1fr 280px; gap: 24px; max-width: 1240px; margin: 0 auto; padding: 28px 20px;
   }
@@ -245,11 +256,18 @@
 </head>
 <body data-persona="new" data-journey="success">
 
-<div style="max-width:1240px; margin:0 auto; padding:20px 20px 0;">
-  <div style="display:flex; gap:8px; padding:10px 0 14px; border-bottom:1px solid var(--line); flex-wrap:wrap;">
-    <a href="oneinvest.html" style="font-size:12px; color:var(--ink-dim); text-decoration:none; padding:6px 12px; border:1px solid var(--line); border-radius:999px;">📘 Journeys &amp; Workflow</a>
-    <a href="oneinvest-prototype.html" style="font-size:12px; color:var(--ink); text-decoration:none; padding:6px 12px; border:1px solid var(--accent); border-radius:999px; background:var(--panel-2);">📱 Interactive Prototype</a>
-    <a href="oneinvest-prd.html" style="font-size:12px; color:var(--ink-dim); text-decoration:none; padding:6px 12px; border:1px solid var(--line); border-radius:999px;">📄 PRD</a>
+<div class="page-header">
+  <div class="brand">
+    <div class="logo">OI</div>
+    <div>
+      <h1>OneInvest</h1>
+      <div class="tagline">Interactive prototype · drive the journeys live</div>
+    </div>
+  </div>
+  <div class="nav">
+    <a href="oneinvest.html">📘 Journeys &amp; Workflow</a>
+    <a class="cur" href="oneinvest-prototype.html">📱 Interactive Prototype</a>
+    <a href="oneinvest-prd.html">📄 PRD</a>
   </div>
 </div>
 
