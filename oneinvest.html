@@ -23,9 +23,19 @@
   }
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; background: var(--bg); color: var(--ink); font-family: -apple-system, "Segoe UI", Roboto, system-ui, sans-serif; line-height: 1.5; }
-  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 20px 80px; }
-  .page-sticky { position: sticky; top: 0; z-index: 50; background: rgba(11,13,18,0.92); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); margin: 0 -20px 18px; padding: 24px 20px 0; }
+  body { padding-top: 0; }
+  .page-sticky {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(11,13,18,0.94);
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line);
+    padding: 18px 32px 14px;
+    margin-bottom: 24px;
+  }
   .page-sticky .brand { margin-bottom: 0; }
+  .page-sticky .nav { margin: 14px 0 0 !important; padding-bottom: 0 !important; border-bottom: 0 !important; }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 32px 80px; }
+  @media (max-width: 720px) { .page-sticky, .wrap { padding-left: 16px; padding-right: 16px; } }
 
   /* Brand */
   .brand {
@@ -43,6 +53,7 @@
   .nav { display: flex; gap: 8px; flex-wrap: wrap; padding: 10px 0 24px; border-bottom: 1px solid var(--line); margin-bottom: 28px; }
   .nav a { font-size: 12px; color: var(--ink-dim); text-decoration: none; padding: 6px 12px; border: 1px solid var(--line); border-radius: 999px; }
   .nav a:hover { color: var(--ink); border-color: var(--accent); }
+  .nav a.cur { background: var(--panel-2); color: var(--ink); border-color: var(--accent); }
 
   /* Section */
   h2 { font-size: 22px; margin: 48px 0 6px; letter-spacing: -0.3px; }
@@ -186,25 +197,24 @@
 </style>
 </head>
 <body>
-<div class="wrap">
 
-  <div class="page-sticky">
-    <div class="brand">
-      <div class="logo">OI</div>
-      <div>
-        <h1>OneInvest</h1>
-        <div style="color:var(--ink-dim); font-size:13px; margin-top:2px;">Journeys &amp; workflow · 3 personas, 3 scenarios</div>
-      </div>
-    </div>
-
-    <div class="nav" style="display:flex; gap:8px; padding:18px 0 14px; border-bottom:1px solid var(--line); margin-top:18px;">
-      <a href="oneinvest.html" style="background:var(--panel-2); color:var(--ink); border-color:var(--accent);">📘 Journeys &amp; Workflow</a>
-      <a href="oneinvest-prototype.html">📱 Interactive Prototype</a>
-      <a href="oneinvest-prd.html">📄 PRD</a>
+<div class="page-sticky">
+  <div class="brand">
+    <div class="logo">OI</div>
+    <div>
+      <h1>OneInvest</h1>
+      <div style="color:var(--ink-dim); font-size:13px; margin-top:2px;">Journeys &amp; workflow · 3 personas, 3 scenarios</div>
     </div>
   </div>
 
-  <div style="height:18px;"></div>
+  <div class="nav">
+    <a href="oneinvest.html" class="cur">📘 Journeys &amp; Workflow</a>
+    <a href="oneinvest-prototype.html">📱 Interactive Prototype</a>
+    <a href="oneinvest-prd.html">📄 PRD</a>
+  </div>
+</div>
+
+<div class="wrap">
 
   <div class="nav">
     <a href="#home">Homepage</a>
