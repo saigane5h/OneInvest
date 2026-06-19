@@ -314,7 +314,13 @@
               <div><span>Filled</span><b id="fill-pct">67%</b></div>
             </div>
             <div class="countdown">⏱ Closes in 02:14:38</div>
-            <div style="margin-top:12px;"><button class="btn" id="btn-invest">Invest in 2 taps →</button></div>
+            <div style="margin-top:12px; display:flex; gap:8px;">
+              <button class="btn" id="btn-invest" style="flex:1;">Invest in 2 taps →</button>
+              <button class="btn ghost" id="btn-ask-niv" style="width:auto; padding:12px 14px; display:flex; align-items:center; gap:6px;">
+                <span style="display:inline-grid; place-items:center; width:20px; height:20px; border-radius:50%; background:linear-gradient(135deg,#a78bfa,#60a5fa); color:#0b0d12; font-size:11px; font-weight:800;">N</span>
+                Ask Niv
+              </button>
+            </div>
           </div>
 
           <div class="section-head"><h4>Your watchlist</h4><a href="#">See all</a></div>
@@ -844,6 +850,33 @@
   const nivBadge = document.getElementById('niv-badge');
 
   const nivScripts = {
+    'explain-new': {
+      open: "Hey Aarav 👋 I'm Niv. This is the RBI Floating Rate Bond — issued by the Reserve Bank of India, so it's as safe as a government promise. Want me to break it down?",
+      chips: ['Is it safe?', 'How is the 8.05% paid?', 'Should I invest ₹10K?'],
+      replies: {
+        'Is it safe?': "Yes. The RBI itself issues this — same government that prints rupee notes. Even if banks fail, government bonds get paid. Safer than FD.",
+        'How is the 8.05% paid?': "Every 6 months, the RBI transfers interest straight to your bank account. On ₹10,000 you'd get about ₹402 a year, paid as ₹201 in Jun and ₹201 in Dec.",
+        'Should I invest ₹10K?': "That depends on your goal. If this ₹10K isn't needed for the next 1–2 years, this is a great parking spot — safer than equity, better than savings account. If you might need it sooner, keep it liquid instead.",
+      },
+    },
+    'explain-mod': {
+      open: "Hi Priya. Quick read on RBI FRB 2034: 8.05% coupon (floating, linked to NSC + spread), semi-annual payout, sovereign-rated, 10-yr tenure. Want a comparison vs your current bond book?",
+      chips: ['Compare vs my HDFC NCD', 'Post-tax math', 'Liquidity?'],
+      replies: {
+        'Compare vs my HDFC NCD': { type: 'card', title: 'RBI FRB 2034 vs HDFC NCD 2030', yld: '8.05% vs 8.40%', meta: 'Sovereign vs AA+ · 10 vs 5 yrs', why: 'HDFC pays 35bps more but is corporate credit. RBI bond protects you in a downturn — and if rates rise, RBI\'s coupon resets upward.' },
+        'Post-tax math': "Coupon is taxable at your slab (32% I assume). Post-tax: 8.05% × 0.68 = 5.48%. Beats most FDs (FD post-tax ~4.5%). Tax-free bonds would beat this — but none open right now.",
+        'Liquidity?': "Listed on BSE after 7 days. Bid-ask is usually 5–8bps. You can exit anytime, just expect some price impact on large lots.",
+      },
+    },
+    'explain-adv': {
+      open: "Rohan — RBI FRB 2034. ISIN IN0020230069. Coupon reset semi-annual = NSC + 35bps. Current effective 8.05%. MD 6.84. Want the trade thesis or the risk numbers?",
+      chips: ['Trade thesis', 'Risk numbers', 'Ladder fit'],
+      replies: {
+        'Trade thesis': "If RBI hikes 25bps in next 6 months (market pricing 38%), coupon resets to ~8.30%. Floating-rate structure removes duration risk in a rising-rate regime. Pair with your fixed-coupon NCDs for a barbell.",
+        'Risk numbers': "MD 6.84 but floating → effective rate risk 0.3 (only the spread fixed). DV01 ≈ ₹76 per ₹10L position. Credit risk: zero (sovereign). Liquidity risk: low — BSE GSec segment median spread 6bps.",
+        'Ladder fit': { type: 'card', title: 'Slot in your bond ladder', yld: '8.05%', meta: 'Fills the 2034 maturity gap · floating-rate hedge', why: 'Your ladder currently bunches at 2030-31. RBI FRB 2034 extends duration without adding fixed-coupon rate risk.' },
+      },
+    },
     'wait-new': {
       open: "Hey Aarav 👋 I see your bond is still processing. Banks take about a minute — your money is safe. Want me to explain what's happening?",
       chips: ['What\'s happening?', 'Is my money safe?', 'How long more?'],
@@ -908,8 +941,10 @@
     },
   };
 
+  let nivContext = null;
   function nivKey() {
-    const sc = body.dataset.journey === 'fail' ? 'fail' : (body.dataset.journey === 'stuck' ? 'wait' : 'wait');
+    if (nivContext) return nivContext + '-' + body.dataset.persona;
+    const sc = body.dataset.journey === 'fail' ? 'fail' : 'wait';
     return sc + '-' + body.dataset.persona;
   }
 
@@ -994,9 +1029,15 @@
 
   function closeNiv() { nivSheet.classList.remove('open'); }
 
-  document.getElementById('niv-fab').addEventListener('click', openNiv);
+  document.getElementById('niv-fab').addEventListener('click', () => { nivContext = null; openNiv(); });
   document.getElementById('niv-close').addEventListener('click', closeNiv);
-  document.querySelectorAll('[data-niv-open]').forEach(el => el.addEventListener('click', openNiv));
+  document.querySelectorAll('[data-niv-open]').forEach(el => el.addEventListener('click', () => { nivContext = null; openNiv(); }));
+
+  document.getElementById('btn-ask-niv').addEventListener('click', () => {
+    nivContext = 'explain';
+    nivBody.innerHTML = ''; nivChips.innerHTML = '';
+    openNiv();
+  });
 
   document.getElementById('niv-send').addEventListener('click', () => {
     const v = document.getElementById('niv-text').value.trim();
