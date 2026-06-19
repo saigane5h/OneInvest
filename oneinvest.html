@@ -222,6 +222,8 @@
     <a href="#j1">Journey 1 · Success</a>
     <a href="#j2">Journey 2 · Stuck</a>
     <a href="#j3">Journey 3 · Allotment Failed</a>
+    <a href="#niv">Niv assistant</a>
+    <a href="#surfaces">Bond details &amp; Portfolio</a>
   </div>
 
   <!-- ================= HOMEPAGE ================= -->
@@ -431,7 +433,7 @@
       <div class="step ok"><div class="n">1</div><div class="t">Apply</div><div class="h">UPI mandate sent</div><div class="d">10:00:03 — money blocked at user's bank.</div></div>
       <div class="step ai"><div class="n">2</div><div class="t">Bank health</div><div class="h">SBI running 40s slow today</div><div class="d">AI surfaces: "Your bank is slower than usual."</div></div>
       <div class="step warn"><div class="n">3</div><div class="t">Live status</div><div class="h">"Waiting for bank · 00:47"</div><div class="d">Tranche fill % updates every 2s. No spinner.</div></div>
-      <div class="step ai"><div class="n">4</div><div class="t">Plan B</div><div class="h">Similar bonds shown</div><div class="d">Eligibility-gated, then AI-ranked by yield similarity.</div></div>
+      <div class="step ai"><div class="n">4</div><div class="t">Niv assistant</div><div class="h">Conversational Plan B</div><div class="d">Niv proactively offers backup options. Persona-aware tone.</div></div>
       <div class="step ok"><div class="n">5</div><div class="t">Confirmed</div><div class="h">Slot allotted at 10:01:12</div><div class="d">Or, if not — auto-refund within 2 hours.</div></div>
       <div class="step ok"><div class="n">6</div><div class="t">Outcome</div><div class="h">Portfolio updated</div><div class="d">If failed → refund tracker + Plan B card.</div></div>
     </div>
@@ -443,11 +445,11 @@
       </div>
       <div class="pcol">
         <div class="lab"><span class="dotcol dot-mod"></span>Priya · Moderate</div>
-        <p>Sees live tranche fill (62% → 71% → 78%). If fill rate looks likely to close her out, AI surfaces 2 similar sovereign bonds with comparable yield. She can "queue" Plan B — auto-apply if Plan A fails.</p>
+        <p>Niv opens with: <i>"Tranche is at 78% and your bank hasn't confirmed. Want me to queue a Plan B?"</i> Live tranche fill (62% → 71% → 78%). Picks chip → Niv shows comparable sovereign bond inline with "why this match".</p>
       </div>
       <div class="pcol">
         <div class="lab"><span class="dotcol dot-adv"></span>Rohan · Advanced</div>
-        <p>Sees raw latency: <i>"HDFC UPI median today: 38s. Yours: 71s."</i> Plan B is filtered by HNI tranche eligibility only. Refund SLA shown numerically: <i>"If unallotted, refund initiated within 2 hrs per NPCI."</i></p>
+        <p>Niv leads with raw latency: <i>"HDFC UPI 38s median, yours sitting at 47s. Fill velocity 4.2%/sec. Plan B?"</i> Plan B is HNI-eligible only. Refund SLA shown numerically.</p>
       </div>
     </div>
   </div>
@@ -466,7 +468,7 @@
       <div class="step bad"><div class="n">1</div><div class="t">Outcome</div><div class="h">Tranche subscribed 100%</div><div class="d">Closed at 10:01:23. Your bank confirmed at 10:01:41.</div></div>
       <div class="step ok"><div class="n">2</div><div class="t">Refund</div><div class="h">UPI block released</div><div class="d">"Money returns to your account in under 2 hours."</div></div>
       <div class="step ai"><div class="n">3</div><div class="t">Why</div><div class="h">Honest explanation</div><div class="d">"Your bank confirmed 18s after tranche closed."</div></div>
-      <div class="step ai"><div class="n">4</div><div class="t">Alternatives</div><div class="h">3 similar bonds + 1 IPO</div><div class="d">Filtered by rules, ranked by AI on yield + tenure.</div></div>
+      <div class="step ai"><div class="n">4</div><div class="t">Niv assistant</div><div class="h">Chat-based alternatives</div><div class="d">Niv explains each suggestion with a "why this match" rationale.</div></div>
       <div class="step ok"><div class="n">5</div><div class="t">Re-engage</div><div class="h">"Notify me 30 min early"</div><div class="d">Next RBI auction date pre-filled.</div></div>
       <div class="step ok"><div class="n">6</div><div class="t">Goodwill</div><div class="h">Priority queue next time</div><div class="d">Auto-applied; no opt-in needed.</div></div>
     </div>
@@ -478,17 +480,80 @@
       </div>
       <div class="pcol">
         <div class="lab"><span class="dotcol dot-mod"></span>Priya · Moderate</div>
-        <p>Sees refund tracker (UTR, expected credit time), a yield-comparison card across 3 alternatives, and a "lock-in to next issuance" toggle that pre-applies her at T-30s when the next RBI tranche opens.</p>
+        <p>Niv opens: <i>"Tranche closed 18s before your bank confirmed. Found 3 similar bonds open today — show them?"</i> She taps "Show 3 alternatives" → 3 ranked cards inline (SDL Maharashtra 95% match, NHAI InvIT 88%, Tata NCD 81%) each with a one-line "why this" rationale.</p>
       </div>
       <div class="pcol">
         <div class="lab"><span class="dotcol dot-adv"></span>Rohan · Advanced</div>
-        <p>Gets a tranche-fill timeline graph, his confirmation timestamp marked on it, and an HNI-only alternatives table with ISIN, YTM, modified duration. Option to escalate to a relationship manager for the next private placement.</p>
+        <p>Niv opens with hard numbers: <i>"Confirm timestamp 10:01:41, tranche close 10:01:23. +18s late. UTR UPI/426193. Priority queue auto-enabled."</i> HNI-only alternatives. Chips: <i>Coupon schedule view, Risk report.</i></p>
       </div>
     </div>
   </div>
 
+  <!-- ================= NEW: NIV ================= -->
+  <h2 id="niv"><span class="num">06</span>Niv — the conversational assistant</h2>
+  <p class="sub">Niv replaces static "AI recommendation" cards with a chat-style assistant that's reachable from any screen (FAB), and proactively opens on emotional moments (UPI wait, allotment fail). Persona-aware opening lines, rich card responses, quick-reply chips and free-text input.</p>
+
+  <div class="grid-3">
+    <div class="card">
+      <h3 style="margin:0 0 6px; font-size:14px; color:var(--violet);">When you tap "Ask Niv" on the bond card</h3>
+      <p style="font-size:12.5px; color:var(--ink-dim); margin:0 0 8px;">Niv explains the bond in the persona's vocabulary.</p>
+      <ul style="font-size:12px; padding-left:18px; margin:0;">
+        <li><b>Aarav:</b> "Safe as a government promise."</li>
+        <li><b>Priya:</b> Yield + post-tax math + vs-HDFC NCD comparison card.</li>
+        <li><b>Rohan:</b> ISIN, MD 6.84, DV01 ₹76, trade thesis.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3 style="margin:0 0 6px; font-size:14px; color:var(--violet);">When you're stuck in UPI</h3>
+      <p style="font-size:12.5px; color:var(--ink-dim); margin:0 0 8px;">Niv narrates the wait so the user doesn't refresh in panic.</p>
+      <ul style="font-size:12px; padding-left:18px; margin:0;">
+        <li><b>Aarav:</b> "Banks take about a minute. Your money is safe."</li>
+        <li><b>Priya:</b> Live tranche %, Plan B at 80% fill.</li>
+        <li><b>Rohan:</b> Median latency vs his bank, fill velocity.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3 style="margin:0 0 6px; font-size:14px; color:var(--violet);">When the bond didn't allot</h3>
+      <p style="font-size:12.5px; color:var(--ink-dim); margin:0 0 8px;">Niv turns rejection into a recovery conversation.</p>
+      <ul style="font-size:12px; padding-left:18px; margin:0;">
+        <li><b>Aarav:</b> "Nothing you did wrong" + 2 simpler alts.</li>
+        <li><b>Priya:</b> 3 ranked alts each with a "why".</li>
+        <li><b>Rohan:</b> Timing-gap receipt + HNI-only alts + risk report.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:14px;">
+    <h3 style="margin:0 0 8px; font-size:14px;">What Niv is and isn't</h3>
+    <p style="font-size:12.5px; color:var(--ink); margin:0 0 6px;"><b>Is:</b> a ranking engine over a deterministic, rule-gated alternatives set. Persona-aware copy. Conversational interface to existing product surfaces. Available everywhere via FAB.</p>
+    <p style="font-size:12.5px; color:var(--ink); margin:0;"><b>Isn't:</b> a free-form LLM that picks bonds. Niv cannot recommend anything outside the suitability-filtered set. Niv cannot decide allotment, eligibility, or refund timing. All compliance disclosures shown inline.</p>
+  </div>
+
+  <!-- ================= BOND DETAILS + PORTFOLIO ================= -->
+  <h2 id="surfaces"><span class="num">07</span>Bond details &amp; portfolio — both persona-aware</h2>
+  <p class="sub">Two surfaces that didn't exist in v0 but now sit in the live prototype: tap the featured bond → bond details page; tap "View portfolio" after a successful subscription → portfolio page. Both shift density and language per persona.</p>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3 style="margin:0 0 8px; font-size:14px;">Bond details · what changes per persona</h3>
+      <ul style="font-size:12.5px; padding-left:18px; margin:0;">
+        <li><b>Aarav:</b> Big yield tile + 4 plain-language FAQ cards (Is it safe? When do I get interest? Can I sell early? What's the catch?). No ISIN, no Greek letters.</li>
+        <li><b>Priya:</b> Coupon-mechanics receipt + post-tax math + comparison table vs SBI FD and HDFC NCD + AI portfolio-fit nudge.</li>
+        <li><b>Rohan:</b> Full receipt — ISIN, RTA, MD 6.84, effective duration 0.31 (floating), DV01 ₹76 per ₹10L, convexity 0.12, settlement, tax. Document downloads + AI trade thesis.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3 style="margin:0 0 8px; font-size:14px;">Portfolio · what changes per persona</h3>
+      <ul style="font-size:12.5px; padding-left:18px; margin:0;">
+        <li><b>Aarav:</b> "₹50,000 · grew ₹430" hero. 3 holding cards in plain words. No charts. "What happens next" explainer.</li>
+        <li><b>Priya:</b> Value + blended-yield KPI tiles. Asset-mix pills (Bonds 42% / Equity 38% / MF 20%). AI coupon-laddering nudge.</li>
+        <li><b>Rohan:</b> Portfolio value, XIRR, MD, credit mix. Bond-ladder table (ISIN/YTM/MD). AI duration-risk warning. Tax/Coupon/Risk reports.</li>
+      </ul>
+    </div>
+  </div>
+
   <!-- ================= PRD link card ================= -->
-  <h2 id="prd"><span class="num">06</span>PRD &amp; AI Product Brief</h2>
+  <h2 id="prd"><span class="num">08</span>PRD &amp; AI Product Brief</h2>
   <p class="sub">The product requirements doc — problem, market gap, AI thesis, KPIs, risks — lives on its own page so it can be shared standalone with stakeholders.</p>
   <a href="oneinvest-prd.html" style="display:block; padding:20px 24px; background:var(--panel); border:1px solid var(--line); border-radius:14px; text-decoration:none; color:var(--ink);">
     <div style="font-size:16px; font-weight:700; margin-bottom:4px;">📄 Open the OneInvest PRD →</div>

@@ -102,15 +102,26 @@
         <tr><td>AI bank-health latency warning</td><td>No</td><td>No</td><td>No</td><td><b>Yes</b></td></tr>
         <tr><td>2-hour refund SLA visible in-app</td><td>No</td><td>No</td><td>No</td><td><b>Yes (NPCI-tracked)</b></td></tr>
         <tr><td>Rule-gated AI alternatives on failure</td><td>No</td><td>Generic</td><td>No</td><td><b>Yes (suitability-filtered)</b></td></tr>
+        <tr><td>Conversational assistant (Niv) on every screen</td><td>No</td><td>No</td><td>No</td><td><b>Yes — persona-aware</b></td></tr>
+        <tr><td>Persona-aware bond details + portfolio</td><td>No</td><td>No</td><td>No</td><td><b>Yes (3 density modes)</b></td></tr>
         <tr><td>Persona-aware copy (new / mod / adv)</td><td>No</td><td>No</td><td>No</td><td><b>Yes</b></td></tr>
         <tr><td>Priority queue after unallotment</td><td>No</td><td>No</td><td>No</td><td><b>Yes</b></td></tr>
       </tbody>
     </table>
 
     <h3>3. AI Thesis — where AI is the moat, where it isn't</h3>
-    <p><b>AI does:</b> demand prediction (auto-scales infra before 10 AM rush), bank-health monitoring (warns slow banks pre-application), fraud-cluster detection (catches bot farms on retail quota), alternative ranking (within rule-gated set), persona-aware copy generation, post-event re-engagement timing.</p>
+    <p><b>AI does:</b> demand prediction (auto-scales infra before 10 AM rush), bank-health monitoring (warns slow banks pre-application), fraud-cluster detection (catches bot farms on retail quota), alternative ranking (within rule-gated set), persona-aware copy generation, post-event re-engagement timing, <b>Niv conversational assistant</b> (explains the bond, narrates UPI wait, turns failure into a recovery conversation).</p>
     <p><b>AI doesn't:</b> allotment (regulator's domain), eligibility/KYC (deterministic), interest rate/yield (treasury's call), refund processing (NPCI-bound), risk-suitability gating (hard rules, not AI judgement).</p>
     <div class="quote">"AI is the ranking engine. Rules are the gate. The gate decides who's allowed in; AI decides what they see first."</div>
+
+    <h3>3a. Niv — conversational assistant (new in v1)</h3>
+    <p>Niv replaces static "AI recommendation" cards with a chat interface reachable from any screen via a floating action button, and proactively opens on emotional moments (UPI wait, allotment fail). 6 scripted journey-context conversations + free-text input. Persona-aware tone:</p>
+    <ul>
+      <li><b>On the bond card</b> — Niv explains the bond. Aarav: "safe as a government promise". Priya: post-tax math + vs HDFC NCD comparison card. Rohan: ISIN, MD 6.84, DV01 ₹76/₹10L, trade thesis.</li>
+      <li><b>During UPI wait</b> — Niv narrates so the user doesn't refresh in panic. Persona-aware tone: calming for new, comparative for moderate, raw latency for advanced.</li>
+      <li><b>After allotment failure</b> — Niv turns rejection into a 3-card alternatives conversation, each with a one-line "why this match" rationale.</li>
+    </ul>
+    <p><b>Guardrails:</b> Niv cannot recommend anything outside the deterministic suitability-filtered set. Niv cannot decide allotment, eligibility, or refund timing. Niv outputs include a disclosure tag ("Suggestions based on your investment history. Not financial advice."). Audit log per recommendation.</p>
 
     <h3>4. Personas</h3>
     <ul>
@@ -136,6 +147,9 @@
       <div class="kpi"><div class="v">≥ 4.6★</div><div class="l">App-store rating in first 6 months</div></div>
       <div class="kpi"><div class="v">≥ 70%</div><div class="l">D30 retention for first-time bond buyers</div></div>
       <div class="kpi"><div class="v">≥ 3.2x</div><div class="l">Avg products held / active user</div></div>
+      <div class="kpi"><div class="v">≥ 55%</div><div class="l">Niv engagement on Stuck / Failed screens</div></div>
+      <div class="kpi"><div class="v">≥ 18%</div><div class="l">Failed-allotment recovery via Niv (alt invested)</div></div>
+      <div class="kpi"><div class="v">≥ 30%</div><div class="l">Bond-detail-page reach on featured items</div></div>
     </div>
 
     <h3>7. Risks &amp; Mitigations</h3>
